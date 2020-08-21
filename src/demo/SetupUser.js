@@ -43,11 +43,11 @@ transaction(tokens:UFix64) {
 }
 `
 
-const SendTransaction = () => {
+const SetupUser = () => {
   const [status, setStatus] = useState("Not started")
   const [transaction, setTransaction] = useState(null)
 
-  const sendTransaction = async (event) => {
+  const SetupUser = async (event) => {
     event.preventDefault()
     
     setStatus("Resolving...")
@@ -93,7 +93,7 @@ const SendTransaction = () => {
 
       <Code>{simpleTransaction}</Code>
 
-      <button onClick={sendTransaction}>
+      <button onClick={SetupUser}>
         Send
       </button>
 
@@ -104,4 +104,4 @@ const SendTransaction = () => {
   )
 }
 
-export default SendTransaction
+export default SetupUser

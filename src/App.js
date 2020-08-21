@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import Section from './components/Section'
 import Header from './components/Header'
 
-import UserInfo from './demo/UserInfo'
-import GetAccount from './demo/GetAccount'
 import Authenticate from './demo/Authenticate'
-import SendTransaction from './demo/SendTransaction'
+import SetupUser from './demo/SetupUser'
+import CheckAccount from './demo/CheckAccount'
+import Bid from './demo/Bid'
 
 const Wrapper = styled.div`
   font-size: 13px;
@@ -20,9 +20,9 @@ function App() {
       <Section>
         <Header>FCL wallet interactions</Header>
         <Authenticate />
-        <GetAccount />
-        <UserInfo />
-        <SendTransaction />
+        <CheckAccount />
+        <SetupUser />
+        <Bid />
       </Section>
     </Wrapper>
   );

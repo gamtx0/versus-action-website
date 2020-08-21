@@ -1,13 +1,13 @@
 import React, {useState} from "react"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
+import * as sdk from "@onflow/sdk"
 
 import Card from '../components/Card'
 import Header from '../components/Header'
 import Code from '../components/Code'
 
-const simpleTransaction = `\
-
+const simpleTransaction = `
 import FungibleToken from 0xee82856bf20e2aa6
 import DemoToken from 0x179b6b1cb6755e31
 import Art from 0xf3fcd2c1a78f5eee
@@ -16,8 +16,7 @@ import NonFungibleToken from 0x01cf0e2f2f715450
 transaction(tokens:UFix64) {
 
     prepare(acct: AuthAccount) {
-
-        let reciverRef = acct.getCapability(/public/DemoTokenReceiver)!
+      let reciverRef = acct.getCapability(/public/DemoTokenReceiver)!
         //If we have a DemoTokenReceiver then we are already set up so just return
         if reciverRef.check<&{FungibleToken.Receiver}>() {
             return
@@ -40,9 +39,7 @@ transaction(tokens:UFix64) {
 
         // publish a capability to the Collection in storage
         acct.link<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection, target: /storage/ArtCollection)
-      
     }
-
 }
 `
 
@@ -64,9 +61,9 @@ const SendTransaction = () => {
     try {
       const { transactionId } = await fcl.send([
         fcl.transaction(simpleTransaction),
+        fcl.args([fcl.arg(100.01, t.UFix64) ]),
         fcl.proposer(fcl.currentUser().authorization),
         fcl.payer(fcl.currentUser().authorization),
-        fcl.args([fcl.arg(100.0, t.UFix64) ]),
         fcl.authorizations([ fcl.currentUser().authorization ]),
         fcl.limit(1000),
         fcl.ref(block.id),

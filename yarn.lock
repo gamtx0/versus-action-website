@@ -1515,6 +1515,11 @@
   resolved "https://registry.yarnpkg.com/@onflow/types/-/types-0.0.2.tgz#ed2bb8c34d2608d3503defcb19c4c1f5b25f5d96"
   integrity sha512-pGBuq7/slH2Xq5drKxFjbppeq0Kq6WLuyOV8lMYb57DPZSfbKnEOBubuq3y1N4kTpqHr+6g/VMqg3O/T20QZxg==
 
+"@onflow/types@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@onflow/types/-/types-0.0.3.tgz#ba72bf581e6d286262e3f5a604024df6125b896e"
+  integrity sha512-GlCaQVgYXn/UCPf2mi3fDZXGVRR239NCjY33FqVUt8W5osp+KzcxKMb5XwsvpXWMg+qOZ7ellbyMrjcNmv9loA==
+
 "@onflow/util-actor@0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@onflow/util-actor/-/util-actor-0.0.1.tgz#6a86b07b337e083f69ea361a417ca02ce6f05487"

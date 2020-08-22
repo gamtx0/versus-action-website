@@ -127,8 +127,6 @@ const Bid = () => {
         Send
       </button>
 
-      <Code>Status: {status}</Code>
-
       {transaction && <Code>{JSON.stringify(transaction, null, 2)}</Code>}
     </Card>
   )

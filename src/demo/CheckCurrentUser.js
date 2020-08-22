@@ -15,15 +15,17 @@ import Art from 0xf3fcd2c1a78f5eee
 import Auction from 0xe03daebed8ca0615
 import Versus from 0x045a1763c93006ca
 
-pub struct BuyerStatus {
+pub struct AddressStatus {
 
   pub(set) var address:Address
   pub(set) var balance: UFix64
   pub(set) var art: {UInt64: {String : String}}
+  pub(set) var drops: {UInt64: Versus.DropStatus}
   init (_ address:Address) {
     self.address=address
     self.balance= UFix64(0)
     self.art= {}
+    self.drops ={}
   }
 }
 
@@ -36,6 +38,13 @@ pub fun main(address:Address) : AddressStatus {
           status.balance=demoTokens.balance
         }
     }
+    if let versusCap = account.getCapability(/public/Versus) {
+        if let versus = versusCap.borrow<&{Versus.PublicDrop}>() {
+          let versusStatuses=versus.getAllStatuses()
+          status.drops=versusStatuses
+          return status
+        } 
+    } 
     
     if let artCap = account.getCapability(/public/ArtCollection) {
        if let art= artCap.borrow<&{NonFungibleToken.CollectionPublic}>()  {

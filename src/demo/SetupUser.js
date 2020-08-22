@@ -44,60 +44,29 @@ transaction(tokens:UFix64) {
 `
 
 const SetupUser = () => {
-  const [status, setStatus] = useState("Not started")
   const [transaction, setTransaction] = useState(null)
 
   const SetupUser = async (event) => {
     event.preventDefault()
     
-    setStatus("Resolving...")
-
-    const blockResponse = await fcl.send([
-      fcl.getLatestBlock(),
-    ])
-
-    const block = await fcl.decode(blockResponse)
-    
-    try {
-      const { transactionId } = await fcl.send([
+      const response = await fcl.send([
         fcl.transaction(simpleTransaction),
         fcl.args([fcl.arg(100.01, t.UFix64) ]),
         fcl.proposer(fcl.currentUser().authorization),
         fcl.payer(fcl.currentUser().authorization),
         fcl.authorizations([ fcl.currentUser().authorization ]),
         fcl.limit(1000),
-        fcl.ref(block.id),
       ])
-
-      setStatus("Transaction sent, waiting for confirmation")
-
-      const unsub = fcl
-        .tx({ transactionId })
-        .subscribe(transaction => {
-          setTransaction(transaction)
-
-          if (fcl.tx.isSealed(transaction)) {
-            setStatus("Transaction is Sealed")
-            unsub()
-          }
-        })
-    } catch (error) {
-      console.error(error);
-      setStatus("Transaction failed")
-    }
+      setTransaction(await fcl.tx(response).onceSealed())
   }
 
   return (
     <Card>
       <Header>setup demo token vault</Header>
 
-      <Code>{simpleTransaction}</Code>
-
       <button onClick={SetupUser}>
         Send
       </button>
-
-      <Code>Status: {status}</Code>
 
       {transaction && <Code>{JSON.stringify(transaction, null, 2)}</Code>}
     </Card>

@@ -27,14 +27,8 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
 
         // get the references to the buyer's Vault and NFT Collection receiver
         self.collectionCap = account.getCapability<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection)!
-        if !self.collectionCap.check() {
-           panic("Unable to borrow a reference to the NFT collection")
-        }
 
         self.vaultCap = account.getCapability<&{FungibleToken.Receiver}>(/public/DemoTokenReceiver)!
-        if !self.vaultCap.check() {
-           panic("Could not find demoVaultCap")
-        }
                     
         let vaultRef = account.borrow<&FungibleToken.Vault>(from: /storage/DemoTokenVault)
             ?? panic("Could not borrow owner's Vault reference")
@@ -58,7 +52,6 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
 `
 
 const Bid = () => {
-  const [status, setStatus] = useState("Not started")
   const [transaction, setTransaction] = useState(null)
   const [auctionId, setAuctionId] = useState(null)
   const [dropId, setDropId] = useState(null)
@@ -67,19 +60,10 @@ const Bid = () => {
   const SetupUser = async (event) => {
     event.preventDefault()
     
-    setStatus("Resolving...")
-
-    const blockResponse = await fcl.send([
-      fcl.getLatestBlock(),
-    ])
-
-    const block = await fcl.decode(blockResponse)
-    
-    try {
-      const { transactionId } = await fcl.send([
+      const response = await fcl.send([
         fcl.transaction(simpleTransaction),
         fcl.args( [
-          //TODO: config
+          //TODO: Read this from config
           fcl.arg("0x120e725050340cab", t.Address),
           fcl.arg(dropId, t.UInt64),
           fcl.arg(auctionId, t.UInt64),
@@ -89,25 +73,8 @@ const Bid = () => {
         fcl.payer(fcl.currentUser().authorization),
         fcl.authorizations([ fcl.currentUser().authorization ]),
         fcl.limit(1000),
-        fcl.ref(block.id),
       ])
-
-      setStatus("Transaction sent, waiting for confirmation")
-
-      const unsub = fcl
-        .tx({ transactionId })
-        .subscribe(transaction => {
-          setTransaction(transaction)
-
-          if (fcl.tx.isSealed(transaction)) {
-            setStatus("Transaction is Sealed")
-            unsub()
-          }
-        })
-    } catch (error) {
-      console.error(error);
-      setStatus("Transaction failed")
-    }
+      setTransaction(await fcl.transaction(response).onceSealed())
   }
 
   const updateAuctionId = (event) => {
@@ -132,6 +99,9 @@ const Bid = () => {
     setAmount(v)
   }
 
+
+  //TODO: Here i want to run checkAccount script to fetch the active bid and display several cards for each auction in the drop
+  //Fill in IDs for auctionID and dropID as hidden fields. Prepopulate bid amount from minBidAmount
 
   return (
     <Card>

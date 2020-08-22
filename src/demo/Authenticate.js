@@ -30,18 +30,23 @@ const SignInOutButton = ({ user: { loggedIn } }) => {
   )
 }
 
-const UserProfile = ({ user }) => (
-  <Profile>
-    {user.identity.avatar && <Img src={user.identity.avatar} />}
+const UserProfile = ({ user }) => {
+  
+  //TODO: here i want to run setupUser automatically if not done
+  //TODO: Here i want to run CheckCurrentUser and add information about balance and NFT owned to Profile below
+  return (
+    <Profile>
+      {user.identity.avatar && <Img src={user.identity.avatar} />}
 
-    <div>
-      <b>Name</b>: {user.identity.name || "Anonymous"}
-    </div>
-    <div>
-      <b>Address</b>: {user.addr || ""}
-    </div>
-  </Profile>
-)
+      <div>
+        <b>Name</b>: {user.identity.name || "Anonymous"}
+      </div>
+      <div>
+        <b>Address</b>: {user.addr || ""}
+      </div>
+    </Profile>
+  )
+}
 
 const CurrentUser = () => {
   const [user, setUser] = useState({})

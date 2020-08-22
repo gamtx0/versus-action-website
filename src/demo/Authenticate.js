@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import styled from "styled-components"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
@@ -34,15 +34,17 @@ pub struct BuyerStatus {
   }
 }
 
-pub fun main(address:Address) : BuyerStatus {
+pub fun main(address:Address) : BuyerStatus? {
     // get the accounts' public address objects
     let account = getAccount(address)
     let status= BuyerStatus(address)
     if let demoTokenCapability =account.getCapability(/public/DemoTokenBalance) {
         if let demoTokens= demoTokenCapability.borrow<&{FungibleToken.Balance}>() {
           status.balance=demoTokens.balance
+        }else {
+          return nil
         }
-    }
+    } 
     
     if let artCap = account.getCapability(/public/ArtCollection) {
        if let art= artCap.borrow<&{NonFungibleToken.CollectionPublic}>()  {
@@ -50,9 +52,48 @@ pub fun main(address:Address) : BuyerStatus {
              var metadata=art.borrowNFT(id: id).metadata
              status.art[id]=metadata
            }
+       } else {
+         return nil
        }
-    }
+    } 
+
     return status
+}
+`
+
+const simpleTransaction = `
+import FungibleToken from 0xee82856bf20e2aa6
+import DemoToken from 0x179b6b1cb6755e31
+import Art from 0xf3fcd2c1a78f5eee
+import NonFungibleToken from 0x01cf0e2f2f715450
+
+transaction(tokens:UFix64) {
+
+    prepare(acct: AuthAccount) {
+      let reciverRef = acct.getCapability(/public/DemoTokenReceiver)!
+        //If we have a DemoTokenReceiver then we are already set up so just return
+        if reciverRef.check<&{FungibleToken.Receiver}>() {
+            return
+        }
+
+        // create a new empty Vault resource
+        let vaultA <- DemoToken.createVaultWithTokens(tokens)
+
+        // store the vault in the accout storage
+        acct.save<@FungibleToken.Vault>(<-vaultA, to: /storage/DemoTokenVault)
+
+        // create a public Receiver capability to the Vault
+        acct.link<&{FungibleToken.Receiver}>( /public/DemoTokenReceiver, target: /storage/DemoTokenVault)
+
+        // create a public Balance capability to the Vault
+        acct.link<&{FungibleToken.Balance}>( /public/DemoTokenBalance, target: /storage/DemoTokenVault)
+
+        // store an empty NFT Collection in account storage
+        acct.save<@NonFungibleToken.Collection>(<- Art.createEmptyCollection(), to: /storage/ArtCollection)
+
+        // publish a capability to the Collection in storage
+        acct.link<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection, target: /storage/ArtCollection)
+    }
 }
 `
 
@@ -75,33 +116,68 @@ const SignInOutButton = ({ user: { loggedIn } }) => {
 }
 
 const UserProfile = ({ user }) => {
+  const [userFetched, setUserFetched] = useState(false)
   const [data, setData] = useState(null)
-
+  const [transaction, setTransaction] = useState(null)
 
   useEffect(() => {
     async function fetchUserDataFromChain() {
-    const response = await fcl.send([
-      fcl.script(scriptBuyerStatus),
-      sdk.args([ sdk.arg(user.addr, t.Address) ])
-    ])
-    console.log(response)
-    setData(await fcl.decode(response)) 
+      const address="0x"+user.addr
+
+      console.log(address)
+      const response = await fcl.send([
+        fcl.script(scriptBuyerStatus),
+        sdk.args([ sdk.arg(address, t.Address) ])
+      ])
+      setData(await fcl.decode(response)) 
+      setUserFetched(true)
     }
     fetchUserDataFromChain()
-  }, [user])
+  }, [user, transaction])
 
-  //TODO: here i want to run setupUser automatically if not done
-  //TODO: Here i want to run CheckCurrentUser and add information about balance and NFT owned to Profile below
+  useEffect(() => {
+    async function setupUser() {
+      const response = await fcl.send([
+        fcl.transaction(simpleTransaction),
+        fcl.args([fcl.arg(100.01, t.UFix64) ]),
+        fcl.proposer(fcl.currentUser().authorization),
+        fcl.payer(fcl.currentUser().authorization),
+        fcl.authorizations([ fcl.currentUser().authorization ]),
+        fcl.limit(1000),
+      ])
+      setTransaction(await fcl.tx(response).onceSealed())
+    }
+
+    if(userFetched && data==null && user ) {
+      console.log("Seting up user2")
+      console.log(user)
+      console.log(data)
+      console.log(userFetched)
+      setupUser()
+    }else {
+      console.log("Not Seting up user ")
+      console.log("userFetched="+userFetched)
+      console.log("data="+data)
+    }
+  }, [userFetched, data])
+
   return (
     <Profile>
       {user.identity.avatar && <Img src={user.identity.avatar} />}
 
-      <div>
+     <div>
         <b>Name</b>: {user.identity.name || "Anonymous"}
+      </div>
+      <div>
+        <b>Balance</b>: {data?.balance || "0"} 
       </div>
       <div>
         <b>Address</b>: {user.addr || ""}
       </div>
+      <div>
+        <b>Art</b>: {JSON.stringify(data?.art || "") } 
+      </div>
+ 
     </Profile>
   )
 }
@@ -125,3 +201,4 @@ const CurrentUser = () => {
 }
 
 export default CurrentUser
+

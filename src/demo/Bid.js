@@ -1,6 +1,7 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
+import * as sdk from "@onflow/sdk"
 
 import Card from '../components/Card'
 import Header from '../components/Header'
@@ -51,85 +52,126 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
 }
 `
 
+const fetchVersusAuctions = `
+import Versus from 0x045a1763c93006ca
+
+pub fun main(address:Address) : Versus.DropStatus?{
+    // get the accounts' public address objects
+    let account = getAccount(address)
+   
+    if let versusCap = account.getCapability(/public/Versus) {
+        if let versus = versusCap.borrow<&{Versus.PublicDrop}>() {
+          let versusStatuses=versus.getAllStatuses()
+          for s in versusStatuses.keys {
+             let status = versusStatuses[s]!
+             if status.uniqueStatus.active != false {
+               log(status)
+               return status
+             }
+          }
+        } 
+    } 
+  return nil
+}
+`
+
 const Bid = () => {
   const [transaction, setTransaction] = useState(null)
-  const [auctionId, setAuctionId] = useState(null)
-  const [dropId, setDropId] = useState(null)
-  const [amount, setAmount] = useState(null)
+  const [drop, setDrop] = useState(null)
+  const [user, setUser] = useState({})
+  const [uniquePrice, setUniquePrice] = useState("10.00")
 
-  const SetupUser = async (event) => {
-    event.preventDefault()
+  useEffect(() =>
+    fcl
+      .currentUser()
+      .subscribe(user => setUser({...user}))
+  , [])
+
+
+  const updateUniquePrice = (event) => {
+    event.preventDefault();
+
+    setUniquePrice(parseFloat(event.target.value))
+  }
+
+  const SetupUser = async (dropId, auctionId, amount) => {
     
-      const response = await fcl.send([
-        fcl.transaction(simpleTransaction),
-        fcl.args( [
-          //TODO: Read this from config
-          fcl.arg("0x120e725050340cab", t.Address),
-          fcl.arg(dropId, t.UInt64),
-          fcl.arg(auctionId, t.UInt64),
-          fcl.arg(amount, t.UFix64) 
-          ]),
-        fcl.proposer(fcl.currentUser().authorization),
-        fcl.payer(fcl.currentUser().authorization),
-        fcl.authorizations([ fcl.currentUser().authorization ]),
-        fcl.limit(1000),
-      ])
-      setTransaction(await fcl.transaction(response).onceSealed())
+          const response = await fcl.send([
+            fcl.transaction(simpleTransaction),
+            fcl.args( [
+              fcl.arg("0x120e725050340cab", t.Address),
+              fcl.arg(dropId, t.UInt64),
+              fcl.arg(auctionId, t.UInt64),
+              fcl.arg(amount, t.UFix64)
+              ]),
+            fcl.proposer(fcl.currentUser().authorization),
+            fcl.payer(fcl.currentUser().authorization),
+            fcl.authorizations([ fcl.currentUser().authorization ]),
+            fcl.limit(1000),
+          ])
+          setTransaction(await fcl.tx(response).onceSealed())
+     }
+
+  useEffect(() => {
+    async function fetchUserDataFromChain() {
+
+    const response = await fcl.send([
+      fcl.script(fetchVersusAuctions),
+      sdk.args([ sdk.arg("0x120e725050340cab", t.Address) ])
+    ])
+    const dropResponse=await fcl.decode(response)
+    setDrop(dropResponse)
+    setUniquePrice(dropResponse.uniqueStatus.minNextBid)
+    }
+    fetchUserDataFromChain()
+  }, [])
+
+  function bid(dropId, auctionId) {
+    var price=uniquePrice
+    if(uniquePrice.toString().indexOf(".")== -1) {
+      price=parseFloat(uniquePrice+".00")
+    }
+    console.log(uniquePrice)
+    console.log(price)
+    SetupUser(dropId,auctionId, price)
   }
-
-  const updateAuctionId = (event) => {
-    event.preventDefault();
-
-    setAuctionId(parseInt(event.target.value))
-  }
-
-  const updateDropId = (event) => {
-    event.preventDefault();
-
-    setDropId(parseInt(event.target.value))
-  }
-
-  const updateAmount = (event) => {
-    event.preventDefault();
-
-    console.log(event.target.value)
-    let v=parseFloat(event.target.value)
-    console.log("foo")
-    console.log(v)
-    setAmount(v)
-  }
-
-
-  //TODO: Here i want to run checkAccount script to fetch the active bid and display several cards for each auction in the drop
-  //Fill in IDs for auctionID and dropID as hidden fields. Prepopulate bid amount from minBidAmount
-
+ 
   return (
-    <Card>
-      <Header>Bid</Header>
-       <input
-        placeholder="DropId"
-        onChange={updateDropId}
-      />
+    <div>
+    { user.loggedIn && drop && (
+        <div>
+          <img src={drop.uniqueStatus.metadata.url} width="200px"  />
+          <br />
+          {drop.uniqueStatus.metadata.name} <br/> 
+          by: {drop.uniqueStatus.metadata.artist} <br/>
+          <br />
+          <a href="read">read about the piece...</a>
 
-      <input
-        placeholder="AuctionId"
-        onChange={updateAuctionId}
-      />
+          <br />
+          <br />
+          <br />
+          <br />
+          Blocks remaining: {drop.uniqueStatus.blocksRemaining}
+         </div>
+    )  }
+    { user.loggedIn && drop &&(
+        <div>
+          Unique auction <br/>
+          Price: {drop.uniquePrice}
+          <br />
 
-      <input
-        placeholder="Amount"
-        value="10.0"
-        onChange={updateAmount}
-      />
+          Price: <input type="number" step="0.01" value={parseFloat(uniquePrice)} onChange={updateUniquePrice} />
+          <button onClick={() => bid(drop.dropId, drop.uniqueStatus.id)}>Bid</button>
+          <br />
+          <br />
+          bid history: {drop.uniqueStatus.bids}
+          <br />
+          TODO: Listen to events for bid history
 
-
-      <button onClick={SetupUser}>
-        Send
-      </button>
-
-      {transaction && <Code>{JSON.stringify(transaction, null, 2)}</Code>}
-    </Card>
-  )
+        </div>
+    )}
+    </div>
+   )
 }
 
 export default Bid

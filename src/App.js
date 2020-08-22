@@ -5,9 +5,6 @@ import Section from './components/Section'
 import Header from './components/Header'
 
 import Authenticate from './demo/Authenticate'
-import SetupUser from './demo/SetupUser'
-import CheckAccount from './demo/CheckAccount'
-import CheckCurrentUser from './demo/CheckCurrentUser'
 import Bid from './demo/Bid'
 
 const Wrapper = styled.div`
@@ -19,10 +16,8 @@ function App() {
   return (
     <Wrapper>
       <Section>
-        <Header>FCL wallet interactions</Header>
+        <Header>VERSUS</Header>
         <Authenticate />
-        <CheckCurrentUser />
-        <SetupUser />
         <Bid />
       </Section>
     </Wrapper>

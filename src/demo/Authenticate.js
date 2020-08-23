@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect} from "react"
 import styled from "styled-components"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
@@ -159,7 +159,7 @@ const UserProfile = ({ user }) => {
       console.log("userFetched="+userFetched)
       console.log("data="+data)
     }
-  }, [userFetched, data])
+  }, [user, userFetched, data])
 
   return (
     <Profile>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect } from "react"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 import * as sdk from "@onflow/sdk"
@@ -47,151 +47,36 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
 }
 `
 
-const fetchVersusAuctions = `
-import Versus from 0x045a1763c93006ca
+const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTransaction }) => {
+  const [price, setPrice] = useState(minNextBid)
 
-pub fun main(address:Address) : Versus.DropStatus?{
-    // get the accounts' public address objects
-    let account = getAccount(address)
-   
-    if let versusCap = account.getCapability(/public/Versus) {
-        if let versus = versusCap.borrow<&{Versus.PublicDrop}>() {
-          let versusStatuses=versus.getAllStatuses()
-          for s in versusStatuses.keys {
-             let status = versusStatuses[s]!
-             if status.uniqueStatus.active != false {
-               log(status)
-               return status
-             }
-          }
-        } 
-    } 
-  return nil
-}
-`
+  useEffect(() => setPrice(minNextBid), [minNextBid])
 
-// TODO: dropId should be sent in as global prop. This should only be called if drop is active and not started yet
-const Bid = () => {
-  const [transaction, setTransaction] = useState(null)
-  const [drop, setDrop] = useState(null)
-  const [user, setUser] = useState({})
-  const [uniquePrice, setUniquePrice] = useState("10.01")
-  const [editionPrice, setEditionPrice] = useState("10.01")
-  const [editionAuctionId, setEditionAuctionId] = useState(2) //todo read this from props sent in. The current active edition auction
-
-  useEffect(() =>
-    fcl
-      .currentUser()
-      .subscribe(user => setUser({...user}))
-  , [])
-
-
-  const updateUniquePrice = (event) => {
-    event.preventDefault();
-
-    setUniquePrice(event.target.value)
-  }
-
-  const BidOnAuction = async (dropId, auctionId, amount) => {
+  const BidOnAuction = async () => {
     
           const response = await fcl.send([
             fcl.transaction(bidTransaction),
             fcl.args( [
-              fcl.arg("0x120e725050340cab", t.Address),
+              fcl.arg(marketplaceAccount, t.Address),
               fcl.arg(dropId, t.UInt64),
               fcl.arg(auctionId, t.UInt64),
-              fcl.arg(parseFloat(amount), t.UFix64)
+              fcl.arg(parseFloat(price), t.UFix64)
               ]),
             fcl.proposer(fcl.currentUser().authorization),
             fcl.payer(fcl.currentUser().authorization),
             fcl.authorizations([ fcl.currentUser().authorization ]),
             fcl.limit(1000),
           ])
-          setTransaction(await fcl.tx(response).onceSealed())
+          handleBidTransaction(await fcl.tx(response).onceSealed())
      }
 
-  useEffect(() => {
-    async function fetchDrop() {
-
-    const response = await fcl.send([
-      fcl.script(fetchVersusAuctions),
-      sdk.args([ sdk.arg("0x120e725050340cab", t.Address) ])
-    ])
-    const dropResponse=await fcl.decode(response)
-    setDrop(dropResponse)
-    setUniquePrice(dropResponse.uniqueStatus.minNextBid)
-    setEditionPrice(dropResponse.editionsStatuses[editionAuctionId].minNextBid)
-    }
-    fetchDrop()
-  }, [transaction, editionAuctionId])
-
-
-  //TODO: find the cheapest item with the lowest edition and set that as active in the select box
-  //TODO: update the current editionNextBid when this value changes
-  function generateEditionSelectBox(editionStatus) {
-    return <select value={editionAuctionId} onChange={ event => setEditionAuctionId(event.target.value)} > 
-        { Object.keys(editionStatus).map(key => 
-            <option value={editionStatus[key].id}>{editionStatus[key].metadata.edition} - price: {editionStatus[key].price}</option>
-        )
-      }
-    </select>
-
-  }
   return (
     <div>
-    { user.loggedIn && drop && (
-        <div>
-          <img alt="art" src={drop.uniqueStatus.metadata.url} width="200px"  />
-          <br />
-          {drop.uniqueStatus.metadata.name} <br/> 
-          by: {drop.uniqueStatus.metadata.artist} <br/>
-          <br />
-          <a href="read">read about the piece...</a>
-
-          <br />
-          <br />
-          <br />
-          <br />
-          Blocks remaining: {drop.uniqueStatus.blocksRemaining}
-         </div>
-    )  }
-    { user.loggedIn && drop &&(
-        <div>
-          Unique auction <br/>
-          Price: {drop.uniquePrice}
-          <br />
-
-          Amount: <input type="number" step="0.01" value={uniquePrice} onChange={updateUniquePrice} />
-          <button onClick={() => BidOnAuction(drop.dropId,drop.uniqueStatus.id, uniquePrice)}>Bid</button>
-          <br />
-          <br />
-          bid history: {drop.uniqueStatus.bids}
-          <br />
-          TODO: Listen to events for bid history
-
-        </div>
-    )}
-
-    { user.loggedIn && drop &&(
-        <div>
-          Editioned auction active : { drop.editionsStatuses[editionAuctionId].metadata.edition}<br/>
-          Total editioned Price: {drop.editionPrice}
-          <br />
-
-          Select edition: { generateEditionSelectBox(drop.editionsStatuses)}
-          <br />
-          Amount: <input type="number" step="0.01" value={editionPrice} onChange={ e => setEditionPrice(e.target.value)} />
-          <button onClick={() => BidOnAuction(drop.dropId, editionAuctionId, editionPrice)}>Bid</button>
-          <br />
-          <br />
-          bid history: {drop.editionsStatuses[editionAuctionId].bids}
-          <br />
-          TODO: Listen to events for bid history
-
-        </div>
-    )}
-    </div>
-   )
+      Amount: <input type="number" step="0.01" value={price} onChange={setPrice} />
+      <button onClick={() => BidOnAuction()}>Bid</button>
+     </div>
+    
+  )
 }
 
-export default Bid
+export default Bid;

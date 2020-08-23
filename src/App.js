@@ -43,8 +43,8 @@ function App() {
         <Header>VERSUS</Header>
         <Authenticate user={user} />
         {user.loggedIn && <VersusProfile user={user} bidTransaction={bidTransaction}/>}
-        {user.loggedIn && <Drop marketplaceAccount={marketplaceAccount} drop={drop} handleDrop={handleDrop} bidTransaction={bidTransaction} handleBidTransaction={handleBidTransaction}/>}
         {user.loggedIn && drop && <UniqueAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} />} 
+        {user.loggedIn && <Drop marketplaceAccount={marketplaceAccount} drop={drop} handleDrop={handleDrop} bidTransaction={bidTransaction} handleBidTransaction={handleBidTransaction}/>}
         {user.loggedIn && drop && <EditionedAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} />} 
       </Section>
     </Wrapper>

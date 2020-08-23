@@ -93,24 +93,24 @@ transaction(tokens:UFix64) {
 }
 `
 
-const VersusProfile = ({ user: { addr }, bidTransaction}) => {
+const VersusProfile = ({ user, bidTransaction}) => {
   const [versusProfileFetched, setVersusProfileFetched] = useState(false)
   const [versusProfile, setVersusProfile]  = useState(false)
   const [transaction, setTransaction] = useState(null)
 
   useEffect(() => {
     async function fetchUserDataFromChain() {
-      const address="0x"+addr
-
-      const response = await fcl.send([
-        fcl.script(scriptBuyerStatus),
-        sdk.args([ sdk.arg(address, t.Address) ])
-      ])
-      setVersusProfile(await fcl.decode(response))
-      setVersusProfileFetched(true)
+      const address="0x"+user.addr
+        const response = await fcl.send([
+          fcl.script(scriptBuyerStatus),
+          sdk.args([ sdk.arg(address, t.Address) ])
+        ])
+          setVersusProfile(await fcl.decode(response))
+          setVersusProfileFetched(true)
     }
-    fetchUserDataFromChain()
-  }, [addr, transaction, bidTransaction])
+   fetchUserDataFromChain()
+
+  }, [user, transaction, bidTransaction])
 
   useEffect(() => {
     async function setupUser() {
@@ -125,14 +125,20 @@ const VersusProfile = ({ user: { addr }, bidTransaction}) => {
       setTransaction(await fcl.tx(response).onceSealed())
     }
 
-    if(versusProfileFetched && versusProfile ==null && addr ) {
+    if(versusProfileFetched && versusProfile ==null && user.addr ) {
       setupUser()
     }
-  }, [addr, versusProfileFetched, versusProfile])
+  }, [user, versusProfileFetched, versusProfile])
 
   return (
     <Card>
     <Profile>
+      <div>
+       <b>Name</b>: {user.identity.name || "Anonymous"}
+     </div>
+     <div>
+       <b>Address</b>: {user.addr || ""}
+     </div>
       <div>
         <b>Balance</b>: {versusProfile?.balance || "0"} 
       </div>
@@ -144,6 +150,5 @@ const VersusProfile = ({ user: { addr }, bidTransaction}) => {
     </Card>
   )
 }
-
 
 export default VersusProfile

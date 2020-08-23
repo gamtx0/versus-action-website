@@ -49,7 +49,7 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
 const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTransaction }) => {
   const [price, setPrice] = useState(minNextBid)
 
-  useEffect(() => setPrice(minNextBid), [minNextBid, auctionId])
+  useEffect(() => setPrice(parseFloat(minNextBid)), [minNextBid, auctionId])
 
   const BidOnAuction = async () => {
     
@@ -71,8 +71,7 @@ const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTrans
 
   return (
     <div>
-      Amount: <input type="number" step="0.01" value={price} onChange={setPrice} />
-      <button onClick={() => BidOnAuction()}>Bid</button>
+      Amount: <input type="number" step="0.01" value={price} onChange={ e => setPrice(parseFloat(e.target.value))} />      <button onClick={() => BidOnAuction()}>Bid</button>
      </div>
     
   )

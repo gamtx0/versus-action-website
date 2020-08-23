@@ -30,27 +30,10 @@ const SignInOutButton = ({ user: { loggedIn } }) => {
   )
 }
 
-// TODO: Tweak profile or move to versus profile?
-const UserProfile = ({ user }) => {
-   return (
-    <Profile>
-      {user.identity.avatar && <Img src={user.identity.avatar} />}
-
-     <div>
-        <b>Name</b>: {user.identity.name || "Anonymous"}
-      </div>
-      <div>
-        <b>Address</b>: {user.addr || ""}
-      </div>
-    </Profile>
-  )
-}
 
 const Authenticate = ({ user}) => {
   return (
     <Card>
-      {user.loggedIn && <UserProfile user={user} />}
-
       <SignInOutButton user={user} />
     </Card>
   )

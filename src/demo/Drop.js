@@ -30,12 +30,14 @@ pub fun main(address:Address) : Versus.DropStatus?{
 
 const Drop = ({ marketplaceAccount, drop, handleDrop, bidTransaction, handleBidTransaction}) => {
  
+  /*
   useEffect(() => {
     const interval = setInterval(() => {
       handleBidTransaction("refresh")
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+  */
 
   //This is rerun alot, why is that?
   useEffect(() => {

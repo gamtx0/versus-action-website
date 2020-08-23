@@ -9,10 +9,6 @@ import Card from '../components/Card'
 const Profile = styled.div`
   margin-bottom: 10px;
 `
-const Img = styled.img`
-  width: 50px;
-  height: 50px;
-`
 
 const scriptBuyerStatus = `
 import FungibleToken from 0xee82856bf20e2aa6

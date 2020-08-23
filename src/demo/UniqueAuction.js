@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from "react"
+import React from "react"
 
 import Card from '../components/Card'
 import Bid from './Bid'
 
 const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
 
-  const winning= drop.winning=="UNIQUE"
+  const winning= drop.winning === "UNIQUE"
   return (
     <Card>
          { winning && <div>WINNING!</div>}

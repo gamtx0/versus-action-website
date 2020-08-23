@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useEffect} from "react"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 import * as sdk from "@onflow/sdk"
@@ -30,6 +30,13 @@ pub fun main(address:Address) : Versus.DropStatus?{
 
 const Drop = ({ marketplaceAccount, drop, handleDrop, bidTransaction, handleBidTransaction}) => {
  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleBidTransaction("refresh")
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   //This is rerun alot, why is that?
   useEffect(() => {
     async function fetchDrop() {
@@ -41,8 +48,8 @@ const Drop = ({ marketplaceAccount, drop, handleDrop, bidTransaction, handleBidT
       handleDrop(dropResponse)
       handleBidTransaction(null) //we mark that the current bid has been taken into account
     }
-    console.log(bidTransaction)
     if( drop == null || bidTransaction != null) {
+        console.log("CHECKED BID")
         fetchDrop()
     }
   }, [drop, marketplaceAccount, bidTransaction])

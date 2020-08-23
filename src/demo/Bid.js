@@ -1,7 +1,6 @@
 import React, {useState, useEffect } from "react"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
-import * as sdk from "@onflow/sdk"
 
 const bidTransaction = `
 import FungibleToken from 0xee82856bf20e2aa6
@@ -50,7 +49,7 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
 const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTransaction }) => {
   const [price, setPrice] = useState(minNextBid)
 
-  useEffect(() => setPrice(minNextBid), [minNextBid])
+  useEffect(() => setPrice(minNextBid), [minNextBid, auctionId])
 
   const BidOnAuction = async () => {
     

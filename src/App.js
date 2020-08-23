@@ -8,6 +8,7 @@ import Authenticate from './demo/Authenticate'
 import VersusProfile from './demo/VersusProfile'
 import Drop from './demo/Drop'
 import UniqueAuction from './demo/UniqueAuction'
+import EditionedAuction from './demo/EditionedAuction'
 
 import * as fcl from "@onflow/fcl"
 const Wrapper = styled.div`
@@ -44,6 +45,7 @@ function App() {
         {user.loggedIn && <VersusProfile user={user} bidTransaction={bidTransaction}/>}
         {user.loggedIn && <Drop marketplaceAccount={marketplaceAccount} drop={drop} handleDrop={handleDrop} bidTransaction={bidTransaction} handleBidTransaction={handleBidTransaction}/>}
         {user.loggedIn && drop && <UniqueAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} />} 
+        {user.loggedIn && drop && <EditionedAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} />} 
       </Section>
     </Wrapper>
   );

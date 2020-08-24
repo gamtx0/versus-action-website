@@ -13,7 +13,7 @@ The Flow CLI is a command-line interface that provides useful utilities for buil
 Run `yarn` at project root.
 
 ### Starting the services
-- Checkout the https://github.com/versus-flow/auction-flow-contract and switch to the `website` branch.
+- Checkout the https://github.com/versus-flow/auction-flow-contract 
 - Start the emulator in a terminal 
 - run `go run run.go` in another terminal
 - **Start FCL dev-wallet**  

@@ -4,15 +4,7 @@ import * as fcl from "@onflow/fcl"
 
 import Card from '../components/Card'
 
-const Profile = styled.div`
-  margin-bottom: 10px;
-`
-const Img = styled.img`
-  width: 50px;
-  height: 50px;
-`
-
-const SignInOutButton = ({ user: { loggedIn } }) => {
+const Authenticate = ({ user: { loggedIn } }) => {
   const signInOrOut = async (event) => {
     event.preventDefault()
 
@@ -30,14 +22,6 @@ const SignInOutButton = ({ user: { loggedIn } }) => {
   )
 }
 
-
-const Authenticate = ({ user}) => {
-  return (
-    <Card>
-      <SignInOutButton user={user} />
-    </Card>
-  )
-}
 
 export default Authenticate
 

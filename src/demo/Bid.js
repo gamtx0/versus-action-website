@@ -66,6 +66,7 @@ const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTrans
             fcl.authorizations([ fcl.currentUser().authorization ]),
             fcl.limit(1000),
           ])
+          console.log(` bid dropId=${dropId} auctionId=${auctionId} price=${parseFloat(price)}`)
           handleBidTransaction(await fcl.tx(response).onceSealed())
      }
 

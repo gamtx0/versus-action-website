@@ -2,8 +2,8 @@ import React, {useState}  from "react"
 import Card from '../components/Card'
 import Bid from './Bid'
 
-const EditionedAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
-  const [auctionId, setAuctionId] = useState(2) 
+const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, firstAuction }) => {
+  const [auctionId, setAuctionId] = useState(parseInt(firstAuction)) 
 
   //TODO: find the cheapest item with the lowest edition and set that as active in the select box
   //TODO: update the current editionNextBid when this value changes

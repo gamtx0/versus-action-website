@@ -3,7 +3,7 @@ import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 import * as sdk from "@onflow/sdk"
 
-import Card from '../components/Card'
+import {Art, Image, Title, Description, Remaining, Time } from '../components/ArtDrop'
 
 const fetchVersusDrop = `
 import Versus from 0x045a1763c93006ca
@@ -56,25 +56,19 @@ const Drop = ({ marketplaceAccount, drop, handleDrop, bidTransaction, handleBidT
     }
   }, [drop, marketplaceAccount, bidTransaction])
 
+
   return (
-     drop && <Card>  
-          <img alt="art" src={drop.uniqueStatus.metadata.url} width="200px"  />
-          <br />
-          {drop.uniqueStatus.metadata.name} <br/> 
-          by: {drop.uniqueStatus.metadata.artist} <br/>
-          <br />
-          <a href="read">read about the piece...</a>
+     drop && <Art>  
+          <Image alt="art" src={drop.uniqueStatus.metadata.url} />
+          <Title>{drop.uniqueStatus.metadata.name}</Title>
+          by: <span>{drop.uniqueStatus.metadata.artist}</span> <br/><br/> 
+          <Description href="read">read about the piece...</Description>
 
-          <br />
-          <br />
-          <br />
-          <br />
-          Blocks remaining: {drop.uniqueStatus.blocksRemaining}
-          <br />
-          Unique Price: {drop.uniquePrice} <br />
-          Total editioned Price: {drop.editionPrice}
+          <Remaining>Blocks remaining:</Remaining> 
+          <Time>{drop.uniqueStatus.blocksRemaining}</Time>
+         
 
-    </Card>
+    </Art>
   )
 }
 //this needs to own UniqueAuction and EditionedAuction and bid state must go up here. TO refetch the drop

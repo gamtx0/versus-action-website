@@ -3,11 +3,17 @@ import React from "react"
 import Bid from './Bid'
 import Events from './Events'
 
-import {UniqueAuctionBox, Title, Price} from '../components/Auction'
+import {UniqueAuctionBox, Title, Price,  Winning, Loosing, Tie} from '../components/Auction'
 
 const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
 
-  const winning= drop.winning === "UNIQUE"
+  var status= <Winning>currently winning</Winning>
+  if(drop.winning === "EDITIONED") {
+    status = <Loosing>currently loosing</Loosing>
+  }else if(drop.winning === "TIE") {
+    status = <Tie>tied</Tie>
+  }
+
   return (
     <UniqueAuctionBox>
    
@@ -19,8 +25,9 @@ const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
           <br />
           <br />
           <br />
+         { status }
           <br />
-         { winning && <div>WINNING!</div>}
+          <br />
           <br />
           <br />
           <br />
@@ -36,8 +43,7 @@ const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
             minNextBid={drop.uniqueStatus.minNextBid}
             handleBidTransaction={handleBidTransaction}  />
           <br />
-          bid history: {drop.uniqueStatus.bids}
-          <br />
+           bid history: {drop.uniqueStatus.bids}
           <br />
           <br />
 

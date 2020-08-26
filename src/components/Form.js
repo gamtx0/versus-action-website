@@ -52,6 +52,7 @@ font-size: inherit;
 box-sizing: content-box;
 border-radius: 0px 8px 8px 0px;
 cursor:pointer;
+margin-bottom:3px;
 `
 
 export const PriceInput=styled.input`

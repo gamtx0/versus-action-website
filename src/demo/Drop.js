@@ -48,10 +48,9 @@ const Drop = ({ marketplaceAccount, drop, handleDrop, bidTransaction, handleBidT
       ])
       const dropResponse=await fcl.decode(response)
       handleDrop(dropResponse)
-      handleBidTransaction(null) //we mark that the current bid has been taken into account
+      handleBidTransaction(null) //we mark that the current transaction has been taken into account
     }
     if( drop == null || bidTransaction != null) {
-        console.log("CHECKED BID")
         fetchDrop()
     }
   }, [drop, marketplaceAccount, bidTransaction])

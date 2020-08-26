@@ -6,7 +6,7 @@ import * as sdk from "@onflow/sdk"
 
 const Profile = styled.div`
   text-align: right;
-  font: Roboto
+  font-size: 0.8em;
 `
 
 const scriptBuyerStatus = `
@@ -92,7 +92,7 @@ transaction(tokens:UFix64) {
 }
 `
 
-const VersusProfile = ({ user, bidTransaction}) => {
+const VersusProfile = ({ user, bidTransaction, handleBidTransaction}) => {
   const [versusProfileFetched, setVersusProfileFetched] = useState(false)
   const [versusProfile, setVersusProfile]  = useState(false)
   const [transaction, setTransaction] = useState(null)

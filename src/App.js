@@ -103,7 +103,7 @@ function App() {
         <Image src="logo.png" />
       </Col>
       <Col xs={3}>
-        {user.loggedIn && <VersusProfile user={user} bidTransaction={bidTransaction}/>}
+        {user.loggedIn && <VersusProfile user={user} bidTransaction={bidTransaction} handleBidTransaction={handleBidTransaction} />}
       </Col>
     </Row>
     <Row around="xs">
@@ -112,10 +112,6 @@ function App() {
       </Col>
       <Col xs={4}>
         {user.loggedIn && <Drop marketplaceAccount={marketplaceAccount} drop={drop} handleDrop={handleDrop} bidTransaction={bidTransaction} handleBidTransaction={handleBidTransaction}/>}
-
-        
-       
-
       </Col>
       <Col xs={3}>
         {user.loggedIn && drop && <EditionedAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} auctions={sortEditionedAuctions(drop.editionsStatuses)} />} 

@@ -3,7 +3,6 @@ import * as sdk from "@onflow/sdk"
 import * as fcl from "@onflow/fcl"
 
 
-
 const GetEvents = ({startBlock, dropId, auctionId}) => {
   const [result, setResult] = useState(null)
 
@@ -19,23 +18,24 @@ const GetEvents = ({startBlock, dropId, auctionId}) => {
       const decodedResponse = await sdk.decodeResponse(response)
       console.log(decodedResponse)
       const filtered = decodedResponse
-      .filter(result => result.data.dropId==dropId && result.data.auctionId == auctionId )
+      .filter(result => result.data.dropId === dropId && result.data.auctionId === auctionId )
       .map(result => ({
         amount: result.data.bidPrice,
         address: result.data.bidderAddress,
         blockHeight: result.data.blockHeight, 
         date: new Date(result.data.time * 1000 ).toLocaleString(),
         unixTime: result.data.time
-      }))
+      })).reverse()
       setResult(filtered)
     }
 
     fetchEvent()
-  }, [eventType, startBlock, dropId,auctionId ])
+  }, [eventType, startBlock, dropId, auctionId ])
 
+  const resultNotEmpty = result && result.length > 0
   return (
     <div>
-      { result && 
+      { resultNotEmpty && 
       <table>
         <thead>
           <th>Address</th>

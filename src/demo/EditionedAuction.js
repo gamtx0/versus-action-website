@@ -1,6 +1,6 @@
 import React, {useState}  from "react"
 import Bid from './Bid'
-import {EditionedAuctionBox, Title, Price} from '../components/Auction'
+import {EditionedAuctionBox, Title, Price, Winning, Loosing, Tie} from '../components/Auction'
 
 import {BidFieldset, Label, Select} from "../components/Form" 
 
@@ -24,7 +24,14 @@ const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auct
   }
 
   const activeAuction=drop.editionsStatuses[auctionId]
-  const winning= drop.winning === "EDITIONED"
+
+  var status= <Winning>currently winning</Winning>
+  if(drop.winning === "UNIQUE") {
+    status = <Loosing>currently loosing</Loosing>
+  }else if(drop.winning === "TIE") {
+    status = <Tie>tied</Tie>
+  }
+
   return (
         <EditionedAuctionBox>
 
@@ -36,10 +43,11 @@ const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auct
           <br />
           <br />
           <br />
-         { winning && <div>WINNING!</div>}
-          <br />
-          <br />
-          <br />
+         { status }
+         <br />
+         <br />
+         <br />
+         <br />
           <br />
           <br />
           <br />

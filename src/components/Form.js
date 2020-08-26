@@ -46,20 +46,21 @@ text-align: right;
 border: 1px solid black;
 width: 275px;
 padding: 0.4em;
+height: 22px;
 font-size: inherit;
 -moz-box-sizing: content-box;
 -webkit-box-sizing: content-box;
 box-sizing: content-box;
 border-radius: 0px 8px 8px 0px;
 cursor:pointer;
-margin-bottom:3px;
+margin-bottom:2px;
 `
 
 export const PriceInput=styled.input`
 background: transparent;
 text-align: right;
 border: 1px solid black;
-width: 070px;
+width: 70px;
 cursor: input;
 padding: 0.5em;
 font-size: inherit;

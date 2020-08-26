@@ -51,6 +51,7 @@ const Drop = ({ marketplaceAccount, drop, handleDrop, bidTransaction, handleBidT
       handleBidTransaction(null) //we mark that the current transaction has been taken into account
     }
     if( drop == null || bidTransaction != null) {
+        console.log("FETCH DROP")
         fetchDrop()
     }
   }, [drop, marketplaceAccount, bidTransaction])

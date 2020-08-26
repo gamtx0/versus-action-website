@@ -92,7 +92,7 @@ transaction(tokens:UFix64) {
 }
 `
 
-const VersusProfile = ({ user, bidTransaction, handleBidTransaction}) => {
+const VersusProfile = ({ user, bidTransaction}) => {
   const [versusProfileFetched, setVersusProfileFetched] = useState(false)
   const [versusProfile, setVersusProfile]  = useState(false)
   const [transaction, setTransaction] = useState(null)

@@ -3,7 +3,7 @@ import * as sdk from "@onflow/sdk"
 import * as fcl from "@onflow/fcl"
 
 
-const GetEvents = ({startBlock, dropId, auctionId}) => {
+const GetEvents = ({startBlock, dropId, auctionId, bidTransaction}) => {
   const [result, setResult] = useState(null)
 
   const eventType="A.045a1763c93006ca.Versus.Bid"
@@ -16,7 +16,6 @@ const GetEvents = ({startBlock, dropId, auctionId}) => {
       ]), { node: url })
   
       const decodedResponse = await sdk.decodeResponse(response)
-      console.log(decodedResponse)
       const filtered = decodedResponse
       .filter(result => result.data.dropId === dropId && result.data.auctionId === auctionId )
       .map(result => ({
@@ -26,11 +25,16 @@ const GetEvents = ({startBlock, dropId, auctionId}) => {
         date: new Date(result.data.time * 1000 ).toLocaleString(),
         unixTime: result.data.time
       })).reverse()
-      setResult(filtered)
-    }
 
-    fetchEvent()
-  }, [eventType, startBlock, dropId, auctionId ])
+
+      setResult(filtered)
+      
+    }
+    if(result == null || bidTransaction!= null){
+      console.log(`FETCH EVENT for auctionId=${auctionId} dropId=${dropId} bidTransaction=${bidTransaction} `)
+      fetchEvent()
+    }
+  }, [eventType, startBlock, dropId, auctionId, bidTransaction ])
 
   const resultNotEmpty = result && result.length > 0
   return (
@@ -38,13 +42,15 @@ const GetEvents = ({startBlock, dropId, auctionId}) => {
       { resultNotEmpty && 
       <table>
         <thead>
+          <tr>
           <th>Address</th>
           <th>Time</th>
           <th>Bid</th>
+          </tr>
         </thead>
         <tbody>
         { result.map( it =>
-            <tr>
+            <tr key={it.date}>
               <td>{it.address}</td>
               <td>{it.date}</td>
               <td>{it.amount}</td>

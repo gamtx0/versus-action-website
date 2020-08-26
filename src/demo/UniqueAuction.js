@@ -5,7 +5,7 @@ import Events from './Events'
 
 import {UniqueAuctionBox, Title, Price,  Winning, Loosing, Tie} from '../components/Auction'
 
-const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
+const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction, bidTranscation }) => {
 
   var status= <Winning>currently winning</Winning>
   if(drop.winning === "EDITIONED") {
@@ -51,6 +51,7 @@ const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
           startBlock={drop.uniqueStatus.startBlock}
           dropId={drop.dropId}
           auctionId={drop.uniqueStatus.id}
+          bidTranscation={bidTranscation}
           /> }
       </UniqueAuctionBox>
    )

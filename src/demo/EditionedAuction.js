@@ -6,7 +6,7 @@ import {BidFieldset, Label, Select} from "../components/Form"
 
 import Events from './Events'
 
-const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auctions }) => {
+const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auctions, bidTransaction }) => {
   const [auctionId, setAuctionId] = useState(parseInt(auctions[0].id)) 
 
 
@@ -73,6 +73,7 @@ const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auct
           startBlock={drop.uniqueStatus.startBlock}
           dropId={drop.dropId}
           auctionId={auctionId}
+          bidTransaction={bidTransaction}
           /> }
         </EditionedAuctionBox>
    )

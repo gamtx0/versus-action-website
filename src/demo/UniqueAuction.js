@@ -1,17 +1,33 @@
 import React from "react"
 
-import Card from '../components/Card'
 import Bid from './Bid'
+import Events from './Events'
+
+import {UniqueAuctionBox, Title, Price} from '../components/Auction'
 
 const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
 
   const winning= drop.winning === "UNIQUE"
   return (
-    <Card>
-         { winning && <div>WINNING!</div>}
+    <UniqueAuctionBox>
    
-          Unique auction <br/>
-          Price: {drop.uniquePrice}
+          <Title>Own the 1/1 NFT</Title>
+          Current bid:<br /> 
+          <Price>
+          {drop.uniquePrice} FT
+          </Price>
+          <br />
+          <br />
+          <br />
+          <br />
+         { winning && <div>WINNING!</div>}
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <br />
           <Bid 
             marketplaceAccount={marketplaceAccount} 
@@ -22,9 +38,15 @@ const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction }) => {
           <br />
           bid history: {drop.uniqueStatus.bids}
           <br />
-          TODO: Listen to events for bid history
+          <br />
+          <br />
 
-      </Card>
+          {  <Events 
+          startBlock={drop.uniqueStatus.startBlock}
+          dropId={drop.dropId}
+          auctionId={drop.uniqueStatus.id}
+          /> }
+      </UniqueAuctionBox>
    )
 }
 

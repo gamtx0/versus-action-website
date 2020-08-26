@@ -8,7 +8,6 @@ import VersusProfile from './demo/VersusProfile'
 import Drop from './demo/Drop'
 import UniqueAuction from './demo/UniqueAuction'
 import EditionedAuction from './demo/EditionedAuction'
-import Events from './demo/Events'
 
 import {ThemeProvider} from 'styled-components'
 import {Grid, Col, Row} from 'react-styled-flexboxgrid'
@@ -34,10 +33,11 @@ const theme = {
   }
 }
 
-const Wrapper = styled.div`
-  font-size: 13px;
-  font-family: Arial, Helvetica, sans-serif;
-`;
+export const Image = styled.img`
+    width: 100px;
+    display: block;
+    margin: auto;
+`
 
 const marketplaceAccount="0x120e725050340cab"
 
@@ -59,33 +59,67 @@ function App() {
       .subscribe(user => setUser({...user}))
   , [])
   
+  function sortEditionedAuctions(auctions) {
+    var entries = Object.values(auctions)
+    entries.sort(function (a, b) {
+      if (a.price > b.price) {
+          return 1;
+      }
+      if (b.price > a.price) {
+          return -1;
+      }
+
+      if(a.metadata.edition.padStart(2, 0) > b.metadata.edition.padStart(2,0)) {
+        return 1;
+      }
+
+      if(b.metadata.edition.padStart(2,0) > a.metadata.edition.padStart(2,0)){
+        return -1;
+      }
+
+      if (a.bids > b.bids) {
+        return 1
+      }
+
+      if(b.price > a.price) {
+        return -1
+      }
+
+      return 0;
+    });
+    return entries
+  }
   return (
     <div class="content-wrapper">
         <ThemeProvider theme={theme}>
 
     <Grid fluid="true">
-    <Row>
-      <Col> 
+     
+    <Row center="xs">
+      <Col xs={3}> 
         <Authenticate user={user} />
       </Col>
-        <Col size={2}>VERSUS</Col>
-      <Col>
+      <Col xs={1}>
+        <Image src="logo.png" />
+      </Col>
+      <Col xs={3}>
         {user.loggedIn && <VersusProfile user={user} bidTransaction={bidTransaction}/>}
       </Col>
     </Row>
     <Row around="xs">
       <Col xs={3}>
-        {user.loggedIn && drop && <UniqueAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} />} 
+        {user.loggedIn && drop && <UniqueAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction}  />} 
       </Col>
       <Col xs={4}>
         {user.loggedIn && <Drop marketplaceAccount={marketplaceAccount} drop={drop} handleDrop={handleDrop} bidTransaction={bidTransaction} handleBidTransaction={handleBidTransaction}/>}
+
+        
+       
+
       </Col>
       <Col xs={3}>
-        {user.loggedIn && drop && <EditionedAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} firstAuction={Object.keys(drop.editionsStatuses)[0]} />} 
+        {user.loggedIn && drop && <EditionedAuction drop={drop} marketplaceAccount={marketplaceAccount} handleBidTransaction={handleBidTransaction} auctions={sortEditionedAuctions(drop.editionsStatuses)} />} 
       </Col>
-    </Row>
-    <Row>
-      <Col> <Events /> </Col>
     </Row>
   </Grid>
   </ThemeProvider>

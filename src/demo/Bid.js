@@ -2,6 +2,8 @@ import React, {useState, useEffect } from "react"
 import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 
+import {BidFieldset, BidButton, Label, PriceInput} from "../components/Form"
+
 const bidTransaction = `
 import FungibleToken from 0xee82856bf20e2aa6
 import NonFungibleToken from 0x01cf0e2f2f715450
@@ -66,14 +68,22 @@ const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTrans
             fcl.authorizations([ fcl.currentUser().authorization ]),
             fcl.limit(1000),
           ])
-          console.log(` bid dropId=${dropId} auctionId=${auctionId} price=${parseFloat(price)}`)
           handleBidTransaction(await fcl.tx(response).onceSealed())
      }
 
+     function handleSubmit(event) {
+      event.preventDefault();
+      BidOnAuction()
+    }
+
   return (
-    <div>
-      Amount: <input type="number" step="0.01" value={price} onChange={ e => setPrice(parseFloat(e.target.value))} />      <button onClick={() => BidOnAuction()}>Bid</button>
-     </div>
+      <form onSubmit={ e => { e.preventDefault(); BidOnAuction()}}>
+        <BidFieldset>
+          <Label for="price">flow</Label>
+          <PriceInput name="price" type="number" min={minNextBid} step="0.01" value={price} onChange={ e => setPrice(parseFloat(e.target.value))} />      
+          <BidButton type="submit" value="Place Bid" />
+       </BidFieldset>
+      </form>
     
   )
 }

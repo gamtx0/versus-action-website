@@ -1,51 +1,58 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import * as sdk from "@onflow/sdk"
+import * as fcl from "@onflow/fcl"
 
-const GetEvents = () => {
+
+
+const GetEvents = ({startBlock, dropId, auctionId}) => {
   const [result, setResult] = useState(null)
-  const [eventType, setEventType] = useState("")
-  const [startBlock, setStartBlock] = useState("")
-  const [endBlock, setEndBlock] = useState("")
 
-  const run = async () => {
+  const eventType="A.045a1763c93006ca.Versus.Bid"
 
-    /*
-      Get Events
-      -----------
-      Declaring an interaction which gets events is done by calling the sdk.getEvents builder.
-      
-      sdk.getEvents consumes an eventType, a startBlock and an endBlock.
-        - eventType: This is the type of event you wish to get.
-        - startBlock: Denotes the starting block to get events from.
-        - endBlock: Denotes the ending block to get events from.
-    */
+  useEffect(() => {
+    async function fetchEvent() {
+      const url = await fcl.config().get("accessNode.api")
+      const response = await sdk.send(await sdk.build([
+        sdk.getEvents(eventType, startBlock, null),
+      ]), { node: url })
+  
+      const decodedResponse = await sdk.decodeResponse(response)
+      console.log(decodedResponse)
+      const filtered = decodedResponse
+      .filter(result => result.data.dropId==dropId && result.data.auctionId == auctionId )
+      .map(result => ({
+        amount: result.data.bidPrice,
+        address: result.data.bidderAddress,
+        blockHeight: result.data.blockHeight, 
+        date: new Date(result.data.time * 1000 ).toLocaleString(),
+        unixTime: result.data.time
+      }))
+      setResult(filtered)
+    }
 
-    const response = await sdk.send(await sdk.build([
-      sdk.getEvents(eventType, startBlock, endBlock),
-    ]), { node: "http://localhost:8080" })
-
-    setResult(await sdk.decodeResponse(response))
-  }
+    fetchEvent()
+  }, [eventType, startBlock, dropId,auctionId ])
 
   return (
     <div>
-      <input
-        placeholder="event type"
-        onChange={e => setEventType(e.target.value)}
-      />
-      <input
-        placeholder="start block"
-        onChange={e => setStartBlock(e.target.value)}
-      />
-      <input
-        placeholder="end block"
-        onChange={e => setEndBlock(e.target.value)}
-      />
-      <button onClick={run}>
-        Run <strong>Get Event</strong> of type {eventType || "___"} from{" "}
-        {startBlock || "___"} -> {endBlock || "___"}
-      </button>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
+      { result && 
+      <table>
+        <thead>
+          <th>Address</th>
+          <th>Time</th>
+          <th>Bid</th>
+        </thead>
+        <tbody>
+        { result.map( it =>
+            <tr>
+              <td>{it.address}</td>
+              <td>{it.date}</td>
+              <td>{it.amount}</td>
+            </tr>
+          )}
+          </tbody>
+      </table>
+      }
     </div>
   )
 }

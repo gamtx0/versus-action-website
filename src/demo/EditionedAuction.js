@@ -1,31 +1,54 @@
 import React, {useState}  from "react"
-import Card from '../components/Card'
 import Bid from './Bid'
+import {EditionedAuctionBox, Title, Price} from '../components/Auction'
 
-const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, firstAuction }) => {
-  const [auctionId, setAuctionId] = useState(parseInt(firstAuction)) 
+import {BidFieldset, Label, Select} from "../components/Form" 
 
-  //TODO: find the cheapest item with the lowest edition and set that as active in the select box
-  //TODO: update the current editionNextBid when this value changes
+import Events from './Events'
+
+const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auctions }) => {
+  const [auctionId, setAuctionId] = useState(parseInt(auctions[0].id)) 
+
+
+
   function generateEditionSelectBox(editionStatus) {
-    return <select value={auctionId} onChange={ e => setAuctionId(parseInt(e.target.value))} > 
-        { Object.keys(editionStatus).map(key => 
-            <option key={editionStatus[key].id} value={editionStatus[key].id}>{editionStatus[key].metadata.edition} - price: {editionStatus[key].price}</option>
+    return <Select name="editions" value={auctionId} onChange={ e => setAuctionId(parseInt(e.target.value))} > 
+        { editionStatus.map( edition =>
+            <option key={edition.id} value={edition.id}>
+              edition: {edition.metadata.edition} - bids: {edition.bids} - price: {edition.price}
+              </option>
         )
       }
-    </select>
+    </Select>
 
   }
 
   const activeAuction=drop.editionsStatuses[auctionId]
-
+  const winning= drop.winning === "EDITIONED"
   return (
-        <Card>
-          Editioned auction active : { activeAuction.metadata.edition}<br/>
-          Total editioned Price: {drop.editionPrice}
-          <br />
+        <EditionedAuctionBox>
 
-          Select edition: { generateEditionSelectBox(drop.editionsStatuses)}
+          <Title>Own 1 of {activeAuction.metadata.maxEdition} NFTs</Title>
+          colective total of bids:<br />
+          <Price> 
+            {drop.editionPrice} Flow
+          </Price>
+          <br />
+          <br />
+          <br />
+         { winning && <div>WINNING!</div>}
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <BidFieldset>
+            <Label for="editions">edition</Label>
+            { generateEditionSelectBox(auctions)}
+
+
+          </BidFieldset>
           <br />
          
           <Bid 
@@ -35,12 +58,15 @@ const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, firs
             minNextBid={activeAuction.minNextBid}
             handleBidTransaction={handleBidTransaction}  />
           <br />
-          <br />
           bid history: {activeAuction.bids}
           <br />
-          TODO: Listen to events for bid history
-
-        </Card>
+          <br />
+          {  <Events 
+          startBlock={drop.uniqueStatus.startBlock}
+          dropId={drop.dropId}
+          auctionId={auctionId}
+          /> }
+        </EditionedAuctionBox>
    )
 }
 

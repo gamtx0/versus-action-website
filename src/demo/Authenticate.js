@@ -2,8 +2,9 @@ import React from "react"
 import styled from "styled-components"
 import * as fcl from "@onflow/fcl"
 
-import Card from '../components/Card'
-
+const Link = styled.a` 
+  color: white;
+`
 const Authenticate = ({ user: { loggedIn } }) => {
   const signInOrOut = async (event) => {
     event.preventDefault()
@@ -16,9 +17,9 @@ const Authenticate = ({ user: { loggedIn } }) => {
   }
 
   return (
-    <button onClick={signInOrOut}>
+    <Link href="#" onClick={signInOrOut}>
       {loggedIn ? 'Sign Out' : 'Sign In/Up'}
-    </button>
+    </Link>
   )
 }
 

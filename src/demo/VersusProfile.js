@@ -4,10 +4,9 @@ import * as fcl from "@onflow/fcl"
 import * as t from "@onflow/types"
 import * as sdk from "@onflow/sdk"
 
-import Card from '../components/Card'
-
 const Profile = styled.div`
-  margin-bottom: 10px;
+  text-align: right;
+  font: Roboto
 `
 
 const scriptBuyerStatus = `
@@ -131,23 +130,11 @@ const VersusProfile = ({ user, bidTransaction}) => {
   }, [user, versusProfileFetched, versusProfile])
 
   return (
-    <Card>
     <Profile>
-      <div>
-       <b>Name</b>: {user.identity.name || "Anonymous"}
-     </div>
-     <div>
-       <b>Address</b>: {user.addr || ""}
-     </div>
-      <div>
-        <b>Balance</b>: {versusProfile?.balance || "0"} 
-      </div>
-      <div>
-        <b>Art</b>: {JSON.stringify(versusProfile?.art || "") } 
-      </div>
- 
+       <b> Name</b>: {user.identity.name || "Anonymous"}
+       <b> Address</b>: {user.addr || ""}  
+       <b> Balance</b>: {versusProfile?.balance || "0"} 
     </Profile>
-    </Card>
   )
 }
 

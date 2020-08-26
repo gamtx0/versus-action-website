@@ -1,12 +1,13 @@
 import styled from 'styled-components'
 
 export const Art = styled.div`
+    margin-top: 50px;
     color: white;
     text-align: center;
 `
 
 export const Image = styled.img`
-    width: 500px;
+    width: 400px;
     border: 1px solid white;
     display: block;
     margin: auto;

@@ -25,11 +25,11 @@ const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auct
 
   const activeAuction=drop.editionsStatuses[auctionId]
 
-  var status= <Winning>currently winning</Winning>
+  var status= <Winning>Highest bid</Winning>
   if(drop.winning === "UNIQUE") {
-    status = <Loosing>currently loosing</Loosing>
+    status = <Loosing>Lowest bid</Loosing>
   }else if(drop.winning === "TIE") {
-    status = <Tie>tied</Tie>
+    status = <Tie>Tied bid</Tie>
   }
 
   return (
@@ -38,7 +38,7 @@ const EditionedAuction = ({ drop, marketplaceAccount, handleBidTransaction, auct
           <Title>Own 1 of {activeAuction.metadata.maxEdition} NFTs</Title>
           colective total of bids:<br />
           <Price> 
-            {drop.editionPrice} Flow
+            {drop.editionPrice} FT
           </Price>
           <br />
           <br />

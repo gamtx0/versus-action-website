@@ -16,30 +16,30 @@ export const UniqueAuctionBox = styled.div`
 `
 
 export const Winning = styled.span`
-background: rgba(161, 192, 132, 0.6); 
-border-radius: 8px;
-color: black;
+background: rgba(61, 215, 58, 0.2); 
+border-radius: 4.5px;
+color: #3DD73A;
 text-align: center;
-padding: 15px;
+padding: 10px;
 
 `
 
 export const Loosing = styled.span`
-background: rgba(224, 82, 99, 0.6); 
-border-radius: 8px;
-color: black;
+background: rgba(250, 32, 32, 0.2); 
+border-radius: 4.5px;
+color: #FA2020;
 text-align: center;
-padding: 15px;
+padding: 10px;
 
 
 `
 
 export const Tie = styled.span`
-background: rgba(255, 202, 177, 0.6); 
-border-radius: 8px;
-color: black;
+background: rgba(170, 173, 30, 0.2); 
+border-radius: 4.5px;
+color: #AAAD1E;
 text-align: center;
-padding: 15px;
+padding: 10px;
 
 
 `

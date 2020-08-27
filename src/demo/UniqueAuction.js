@@ -7,11 +7,11 @@ import {UniqueAuctionBox, Title, Price,  Winning, Loosing, Tie} from '../compone
 
 const UniqueAuction = ({ drop, marketplaceAccount,  handleBidTransaction, bidTranscation }) => {
 
-  var status= <Winning>currently winning</Winning>
+  var status= <Winning>Highest bid</Winning>
   if(drop.winning === "EDITIONED") {
-    status = <Loosing>currently loosing</Loosing>
+    status = <Loosing>Lowest bid</Loosing>
   }else if(drop.winning === "TIE") {
-    status = <Tie>tied</Tie>
+    status = <Tie>Tied bid</Tie>
   }
 
   return (

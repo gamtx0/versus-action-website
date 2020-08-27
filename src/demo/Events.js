@@ -30,10 +30,7 @@ const GetEvents = ({startBlock, dropId, auctionId, bidTransaction}) => {
       setResult(filtered)
       
     }
-    if(result == null || bidTransaction!= null){
-      console.log(`FETCH EVENT for auctionId=${auctionId} dropId=${dropId} bidTransaction=${bidTransaction} `)
-      fetchEvent()
-    }
+    fetchEvent()
   }, [eventType, startBlock, dropId, auctionId, bidTransaction ])
 
   const resultNotEmpty = result && result.length > 0

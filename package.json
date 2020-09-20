@@ -5,6 +5,7 @@
     "@onflow/fcl": "^0.0.52",
     "@onflow/sdk": "0.0.30",
     "@onflow/types": "0.0.3",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",

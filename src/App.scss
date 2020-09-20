@@ -1,0 +1,53 @@
+iframe {
+  z-index: 5;
+}
+.bg-columns,
+.bg-triangle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.bg-columns {
+  background-color: white;
+  z-index: 1;
+}
+
+.bg-columns:before,
+.bg-columns:after {
+  content: "";
+  position: absolute;
+  height: 100vh;
+  width: 50%;
+}
+
+.bg-columns:before {
+  background-color: grey;
+  left: 0;
+}
+
+.bg-columns:after {
+  background-color: white;
+  right: 0;
+}
+
+.bg-triangle {
+  width: 0px;
+  height: 0px;
+  border-left: 33vw solid transparent;
+  border-right: 33vw solid transparent;
+  border-top: 100vh solid #000;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.content-wrapper {
+  margin: 30px auto;
+  position: relative;
+  z-index: 3;
+  color: white;
+  font-family: "Roboto", "Lucida Grande", Tahoma, Sans-Serif;
+}

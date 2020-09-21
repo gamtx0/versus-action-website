@@ -1,13 +1,21 @@
-import React, {useState, useEffect} from "react"
-import styled from "styled-components"
-import * as fcl from "@onflow/fcl"
-import * as t from "@onflow/types"
-import * as sdk from "@onflow/sdk"
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
+import * as sdk from "@onflow/sdk";
 
 const Profile = styled.div`
-  text-align: right;
   font-size: 0.8em;
-`
+  color: #979797;
+
+  span {
+    display: block;
+
+    + span {
+      padding-top: 0.5rem;
+    }
+  }
+`;
 
 const scriptBuyerStatus = `
 import FungibleToken from 0xee82856bf20e2aa6
@@ -54,7 +62,7 @@ pub fun main(address:Address) : BuyerStatus? {
 
     return status
 }
-`
+`;
 
 const setupVersusUser = `
 import FungibleToken from 0xee82856bf20e2aa6
@@ -90,52 +98,57 @@ transaction(tokens:UFix64) {
         acct.link<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection, target: /storage/ArtCollection)
     }
 }
-`
+`;
 
-const VersusProfile = ({ user, bidTransaction}) => {
-  const [versusProfileFetched, setVersusProfileFetched] = useState(false)
-  const [versusProfile, setVersusProfile]  = useState(false)
-  const [transaction, setTransaction] = useState(null)
+const VersusProfile = ({ user, bidTransaction }) => {
+  const [versusProfileFetched, setVersusProfileFetched] = useState(false);
+  const [versusProfile, setVersusProfile] = useState(false);
+  const [transaction, setTransaction] = useState(null);
 
   useEffect(() => {
     async function fetchUserDataFromChain() {
-      const address="0x"+user.addr
-        const response = await fcl.send([
-          fcl.script(scriptBuyerStatus),
-          sdk.args([ sdk.arg(address, t.Address) ])
-        ])
-          setVersusProfile(await fcl.decode(response))
-          setVersusProfileFetched(true)
+      const address = "0x" + user.addr;
+      const response = await fcl.send([
+        fcl.script(scriptBuyerStatus),
+        sdk.args([sdk.arg(address, t.Address)]),
+      ]);
+      setVersusProfile(await fcl.decode(response));
+      setVersusProfileFetched(true);
     }
-   fetchUserDataFromChain()
-
-  }, [user, transaction, bidTransaction])
+    fetchUserDataFromChain();
+  }, [user, transaction, bidTransaction]);
 
   useEffect(() => {
     async function setupUser() {
       const response = await fcl.send([
         fcl.transaction(setupVersusUser),
-        fcl.args([fcl.arg(100.01, t.UFix64) ]),
+        fcl.args([fcl.arg(100.01, t.UFix64)]),
         fcl.proposer(fcl.currentUser().authorization),
         fcl.payer(fcl.currentUser().authorization),
-        fcl.authorizations([ fcl.currentUser().authorization ]),
+        fcl.authorizations([fcl.currentUser().authorization]),
         fcl.limit(1000),
-      ])
-      setTransaction(await fcl.tx(response).onceSealed())
+      ]);
+      setTransaction(await fcl.tx(response).onceSealed());
     }
 
-    if(versusProfileFetched && versusProfile ==null && user.addr ) {
-      setupUser()
+    if (versusProfileFetched && versusProfile == null && user.addr) {
+      setupUser();
     }
-  }, [user, versusProfileFetched, versusProfile])
+  }, [user, versusProfileFetched, versusProfile]);
 
   return (
     <Profile>
-       <b> Name</b>: {user.identity.name || "Anonymous"}
-       <b> Address</b>: {user.addr || ""}  
-       <b> Balance</b>: {versusProfile?.balance || "0"} 
+      <span>
+        <b> Name</b>: {user.identity.name || "Anonymous"}
+      </span>
+      <span>
+        <b> Address</b>: {user.addr || ""}
+      </span>
+      <span>
+        <b> Balance</b>: {versusProfile?.balance || "0"}
+      </span>
     </Profile>
-  )
-}
+  );
+};
 
-export default VersusProfile
+export default VersusProfile;

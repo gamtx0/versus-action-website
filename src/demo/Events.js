@@ -45,6 +45,7 @@ const GetEvents = ({ startBlock, dropId, auctionId, bidTransaction }) => {
 
   const BidHistory = styled.table`
     padding: 0;
+    width: 100%;
 
     th {
       border-bottom: none;

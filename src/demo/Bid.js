@@ -1,8 +1,8 @@
-import React, {useState, useEffect } from "react"
-import * as fcl from "@onflow/fcl"
-import * as t from "@onflow/types"
+import React, { useState, useEffect } from "react";
+import * as fcl from "@onflow/fcl";
+import * as t from "@onflow/types";
 
-import {BidFieldset, BidButton, Label, PriceInput} from "../components/Form"
+import { BidFieldset, BidButton, Label, PriceInput } from "../components/Form";
 
 const bidTransaction = `
 import FungibleToken from 0xee82856bf20e2aa6
@@ -46,46 +46,64 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
         versusRef.placeBid(dropId: dropId, auctionId: auctionId, bidTokens: <- self.temporaryVault, vaultCap: self.vaultCap, collectionCap: self.collectionCap)
     }
 }
-`
+`;
 
-const Bid = ({ marketplaceAccount, dropId, auctionId, minNextBid, handleBidTransaction }) => {
-  const [price, setPrice] = useState(minNextBid)
+const Bid = ({
+  marketplaceAccount,
+  dropId,
+  auctionId,
+  minNextBid,
+  handleBidTransaction,
+}) => {
+  const [price, setPrice] = useState(minNextBid);
 
-  useEffect(() => setPrice(parseFloat(minNextBid)), [minNextBid, auctionId])
+  useEffect(() => setPrice(parseFloat(minNextBid)), [minNextBid, auctionId]);
 
   const BidOnAuction = async () => {
-    
-          const response = await fcl.send([
-            fcl.transaction(bidTransaction),
-            fcl.args( [
-              fcl.arg(marketplaceAccount, t.Address),
-              fcl.arg(dropId, t.UInt64),
-              fcl.arg(auctionId, t.UInt64),
-              fcl.arg(parseFloat(price), t.UFix64)
-              ]),
-            fcl.proposer(fcl.currentUser().authorization),
-            fcl.payer(fcl.currentUser().authorization),
-            fcl.authorizations([ fcl.currentUser().authorization ]),
-            fcl.limit(1000),
-          ])
-          handleBidTransaction(await fcl.tx(response).onceSealed())
-     }
+    const response = await fcl.send([
+      fcl.transaction(bidTransaction),
+      fcl.args([
+        fcl.arg(marketplaceAccount, t.Address),
+        fcl.arg(dropId, t.UInt64),
+        fcl.arg(auctionId, t.UInt64),
+        fcl.arg(parseFloat(price), t.UFix64),
+      ]),
+      fcl.proposer(fcl.currentUser().authorization),
+      fcl.payer(fcl.currentUser().authorization),
+      fcl.authorizations([fcl.currentUser().authorization]),
+      fcl.limit(1000),
+    ]);
+    handleBidTransaction(await fcl.tx(response).onceSealed());
+  };
 
-     function handleSubmit(event) {
-      event.preventDefault();
-      BidOnAuction()
-    }
+  function handleSubmit(event) {
+    event.preventDefault();
+    BidOnAuction();
+  }
 
   return (
-      <form onSubmit={ e => { e.preventDefault(); BidOnAuction()}}>
-        <BidFieldset>
-          <Label for="price">flow</Label>
-          <PriceInput name="price" type="number" min={minNextBid} step="0.01" value={price} onChange={ e => setPrice(parseFloat(e.target.value))} />      
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        BidOnAuction();
+      }}
+    >
+      <BidFieldset>
+        <Label for="price">flow</Label>
+        <PriceInput
+          name="price"
+          type="number"
+          min={minNextBid}
+          step="0.01"
+          value={price}
+          onChange={(e) => setPrice(parseFloat(e.target.value))}
+        />
+        <div className="button-wrap">
           <BidButton type="submit" value="Place Bid" />
-       </BidFieldset>
-      </form>
-    
-  )
-}
+        </div>
+      </BidFieldset>
+    </form>
+  );
+};
 
 export default Bid;

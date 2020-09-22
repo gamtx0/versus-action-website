@@ -27,8 +27,6 @@ export const BidButton = styled.input`
 
 export const BidFieldset = styled.fieldset`
   border: 0;
-  font-size: 1em;
-  margin-top: 170px;
   padding: 0px;
 `;
 

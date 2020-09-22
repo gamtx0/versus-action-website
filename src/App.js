@@ -102,7 +102,7 @@ function App() {
               <Authenticate user={user} />
             </Col>
             <Col xs={3}>
-              <Image src="logo.png" />
+              <Image className="logo" src="logo.png" />
             </Col>
             <Col
               xs={4}

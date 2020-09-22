@@ -114,7 +114,7 @@ function App() {
             </Col>
           </Row>
           <Row around="xs">
-            <Col xs={3}>
+            <Col xs={4}>
               {user.loggedIn && drop && (
                 <UniqueAuction
                   drop={drop}
@@ -135,7 +135,7 @@ function App() {
                 />
               )}
             </Col>
-            <Col xs={3}>
+            <Col xs={4}>
               {user.loggedIn && drop && (
                 <EditionedAuction
                   drop={drop}

@@ -7,7 +7,7 @@ import {
   UniqueAuctionBox,
   Title,
   Subtitle,
-  Label,
+  Pretext,
   Price,
   Winning,
   Loosing,
@@ -34,9 +34,9 @@ const UniqueAuction = ({
       <Subtitle>
         <span>*Plus</span> the original painting
       </Subtitle>
-      <Label>Current bid:</Label>
+      <Pretext>current bid:</Pretext>
       <Price>{drop.uniquePrice} FT</Price>
-      {status}
+      <div className="margin-bottom-170">{status}</div>
 
       <Bid
         marketplaceAccount={marketplaceAccount}
@@ -44,11 +44,12 @@ const UniqueAuction = ({
         auctionId={drop.uniqueStatus.id}
         minNextBid={drop.uniqueStatus.minNextBid}
         handleBidTransaction={handleBidTransaction}
+        className="margin-top-170"
       />
       <History>
-        <Label>
+        <Pretext>
           bid history: <span>{drop.uniqueStatus.bids}</span>
-        </Label>
+        </Pretext>
         {
           <Events
             startBlock={drop.uniqueStatus.startBlock}

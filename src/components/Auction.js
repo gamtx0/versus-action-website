@@ -72,7 +72,7 @@ export const Subtitle = styled.div`
   }
 `;
 
-export const Label = styled.span`
+export const Pretext = styled.span`
   display: block;
   font-size: 13px;
   margin-bottom: 10px;

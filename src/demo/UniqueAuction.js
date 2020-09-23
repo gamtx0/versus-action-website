@@ -36,7 +36,7 @@ const UniqueAuction = ({
       </Subtitle>
       <Pretext>current bid:</Pretext>
       <Price>{drop.uniquePrice} FT</Price>
-      <div className="margin-bottom-170">{status}</div>
+      <div className="margin-bottom-260">{status}</div>
 
       <Bid
         marketplaceAccount={marketplaceAccount}

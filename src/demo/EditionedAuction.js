@@ -11,7 +11,12 @@ import {
   History,
 } from "../components/Auction";
 
-import { BidFieldset, Label, Select } from "../components/Form";
+import {
+  BidFieldset,
+  SelectFieldWrapper,
+  Select,
+  EditionInfo,
+} from "../components/Form";
 
 import Events from "./Events";
 
@@ -26,18 +31,40 @@ const EditionedAuction = ({
 
   function generateEditionSelectBox(editionStatus) {
     return (
-      <Select
-        name="editions"
-        value={auctionId}
-        onChange={(e) => setAuctionId(parseInt(e.target.value))}
-      >
-        {editionStatus.map((edition) => (
-          <option key={edition.id} value={edition.id}>
-            edition: {edition.metadata.edition} - bids: {edition.bids} - price:{" "}
-            {edition.price}
-          </option>
-        ))}
-      </Select>
+      <div className="max-width-211">
+        <SelectFieldWrapper>
+          <label for="editions" className="text-label">
+            Select the edition # to bid on
+          </label>
+          <Select
+            name="editions"
+            value={auctionId}
+            onChange={(e) => setAuctionId(parseInt(e.target.value))}
+          >
+            {editionStatus.map((edition) => (
+              <option key={edition.id} value={edition.id}>
+                #{edition.metadata.edition}
+              </option>
+            ))}
+          </Select>
+        </SelectFieldWrapper>
+        <EditionInfo>
+          <span className="label">
+            Current bid on #{editionStatus[auctionId].id} is:
+          </span>
+          <span className="data">
+            <span className="data__price-wrap">
+              <span className="data__price-wrap__currency-label">$</span>
+              <span className="data__price-wrap__price">
+                {editionStatus[auctionId].price}
+              </span>
+            </span>
+            <span className="data__price-wrap__bids">
+              {editionStatus[auctionId].bids} bids
+            </span>
+          </span>
+        </EditionInfo>
+      </div>
     );
   }
 
@@ -56,8 +83,7 @@ const EditionedAuction = ({
       <Pretext className="pad-top-30">collective total of all bids:</Pretext>
       <Price>{drop.editionPrice} FT</Price>
       <div className="flex justify-content-end margin-bottom-110">{status}</div>
-      <BidFieldset>
-        <Label for="editions">edition</Label>
+      <BidFieldset className="align-right">
         {generateEditionSelectBox(auctions)}
         <Bid
           marketplaceAccount={marketplaceAccount}

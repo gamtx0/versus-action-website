@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as fcl from "@onflow/fcl";
 import * as t from "@onflow/types";
 
-import { BidFieldset, BidButton, Label, PriceInput } from "../components/Form";
+import { BidFieldset, BidButton, PriceFieldWrapper } from "../components/Form";
 
 const bidTransaction = `
 import FungibleToken from 0xee82856bf20e2aa6
@@ -89,18 +89,18 @@ const Bid = ({
       }}
     >
       <BidFieldset>
-        <Label for="price">flow</Label>
-        <PriceInput
-          name="price"
-          type="number"
-          min={minNextBid}
-          step="0.01"
-          value={price}
-          onChange={(e) => setPrice(parseFloat(e.target.value))}
-        />
-        <div className="button-wrap">
-          <BidButton type="submit" value="Place Bid" />
-        </div>
+        <PriceFieldWrapper>
+          <label for="price">flow</label>
+          <input
+            name="price"
+            type="number"
+            min={minNextBid}
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(parseFloat(e.target.value))}
+          />
+        </PriceFieldWrapper>
+        <BidButton type="submit" value="Place Bid" />
       </BidFieldset>
     </form>
   );

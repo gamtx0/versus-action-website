@@ -89,6 +89,7 @@ export const History = styled.div`
 
   span {
     font-size: 14px;
+    text-align: left;
 
     span {
       font-weight: 700;

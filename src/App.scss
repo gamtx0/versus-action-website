@@ -1,5 +1,9 @@
 @import "../node_modules/normalize-scss/sass/normalize/import-now";
 
+* {
+  box-sizing: border-box;
+}
+
 iframe {
   z-index: 5;
 }
@@ -60,8 +64,16 @@ iframe {
   display: flex !important;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .align-items-center {
   align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
 }
 
 .justify-content-start {
@@ -80,24 +92,33 @@ iframe {
   margin-bottom: 90px;
 }
 
-.margin-bottom-170 {
-  margin-bottom: 170px;
+.margin-bottom-260 {
+  margin-bottom: 260px;
 }
 
 .margin-top-170 {
   margin-top: 170px;
 }
 
+.max-width-211 {
+  max-width: 211px;
+  width: 100%;
+}
+
 // Hack the nested FieldSet margin
 fieldset {
-  select + form {
+  &.align-right {
+    @extend .flex;
+    @extend .flex-column;
+    @extend .align-items-end;
+
+    form {
+      max-width: 211px;
+      width: 100%;
+    }
+
     > fieldset {
       margin-top: 20px !important;
-
-      .button-wrap {
-        @extend .flex;
-        @extend .justify-content-end;
-      }
     }
   }
 }

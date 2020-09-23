@@ -35,7 +35,7 @@ const UniqueAuction = ({
         <span>*Plus</span> the original painting
       </Subtitle>
       <Pretext>current bid:</Pretext>
-      <Price>{drop.uniquePrice} FT</Price>
+      <Price>&#120125; {drop.uniquePrice}</Price>
       <div className="margin-bottom-260">{status}</div>
 
       <Bid

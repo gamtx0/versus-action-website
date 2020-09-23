@@ -90,7 +90,7 @@ const Bid = ({
     >
       <BidFieldset>
         <PriceFieldWrapper>
-          <label for="price">flow</label>
+          <label for="price">&#120125;</label>
           <input
             name="price"
             type="number"

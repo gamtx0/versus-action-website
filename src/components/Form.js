@@ -122,7 +122,7 @@ export const EditionInfo = styled.div`
 
     &__price-wrap {
       &__currency-label {
-        padding-right: 1px;
+        padding-right: 2px;
       }
       &__price {
         font-size: 17px;

@@ -54,7 +54,9 @@ const EditionedAuction = ({
           </span>
           <span className="data">
             <span className="data__price-wrap">
-              <span className="data__price-wrap__currency-label">$</span>
+              <span className="data__price-wrap__currency-label">
+                &#120125;
+              </span>
               <span className="data__price-wrap__price">
                 {editionStatus[auctionId].price}
               </span>
@@ -81,7 +83,7 @@ const EditionedAuction = ({
     <EditionedAuctionBox>
       <Title>Own 1 of {activeAuction.metadata.maxEdition} NFTs</Title>
       <Pretext className="pad-top-30">collective total of all bids:</Pretext>
-      <Price>{drop.editionPrice} FT</Price>
+      <Price>&#120125; {drop.editionPrice}</Price>
       <div className="flex justify-content-end margin-bottom-110">{status}</div>
       <BidFieldset className="align-right">
         {generateEditionSelectBox(auctions)}

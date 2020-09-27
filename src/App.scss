@@ -92,8 +92,8 @@ iframe {
   margin-bottom: 90px;
 }
 
-.margin-bottom-260 {
-  margin-bottom: 260px;
+.margin-bottom-277 {
+  margin-bottom: 277px;
 }
 
 .margin-top-170 {
@@ -106,7 +106,7 @@ iframe {
 }
 
 // Hack the nested FieldSet margin
-fieldset {
+div {
   &.align-right {
     @extend .flex;
     @extend .flex-column;
@@ -117,7 +117,7 @@ fieldset {
       width: 100%;
     }
 
-    > fieldset {
+    > div {
       margin-top: 20px !important;
     }
   }

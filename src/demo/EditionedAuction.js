@@ -29,7 +29,7 @@ const EditionedAuction = ({
 }) => {
   const [auctionId, setAuctionId] = useState(parseInt(auctions[0].id));
 
-  function generateEditionSelectBox(editionStatus) {
+  function generateEditionSelectBox(editionStatus, activeAuction) {
     return (
       <div className="max-width-211">
         <SelectFieldWrapper>
@@ -50,7 +50,7 @@ const EditionedAuction = ({
         </SelectFieldWrapper>
         <EditionInfo>
           <span className="label">
-            Current bid on #{editionStatus[auctionId].id} is:
+            Current bid on #{activeAuction.metadata.edition} is:
           </span>
           <span className="data">
             <span className="data__price-wrap">
@@ -58,11 +58,11 @@ const EditionedAuction = ({
                 &#120125;
               </span>
               <span className="data__price-wrap__price">
-                {editionStatus[auctionId].price}
+                {activeAuction.price}
               </span>
             </span>
             <span className="data__price-wrap__bids">
-              {editionStatus[auctionId].bids} bids
+              {activeAuction.bids} bids
             </span>
           </span>
         </EditionInfo>
@@ -70,7 +70,7 @@ const EditionedAuction = ({
     );
   }
 
-  const activeAuction = drop.editionsStatuses[auctionId];
+  const activeAuction= auctions.find((a) => a.id== auctionId )
 
   var status = <Winning>Highest bid</Winning>;
   if (drop.winning === "UNIQUE") {
@@ -86,7 +86,7 @@ const EditionedAuction = ({
       <Price>&#120125; {drop.editionPrice}</Price>
       <div className="flex justify-content-end margin-bottom-110">{status}</div>
       <BidFieldset className="align-right">
-        {generateEditionSelectBox(auctions)}
+        {generateEditionSelectBox(auctions, activeAuction)}
         <Bid
           marketplaceAccount={marketplaceAccount}
           dropId={drop.dropId}

@@ -62,6 +62,7 @@ export const PriceFieldWrapper = styled.div`
   }
 
   input {
+    color: inherit;
     background: transparent;
     border: none; // reset user agent styles
     border-bottom: 1px solid #d3d8dd;

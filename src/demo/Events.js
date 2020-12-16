@@ -6,7 +6,7 @@ import * as fcl from "@onflow/fcl";
 const GetEvents = ({ startBlock, dropId, auctionId, bidTransaction }) => {
   const [result, setResult] = useState(null);
 
-  const eventType = "A.045a1763c93006ca.Versus.Bid";
+  const eventType = "A.01cf0e2f2f715450.Versus.Bid";
 
   useEffect(() => {
     async function fetchEvent() {

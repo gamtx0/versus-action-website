@@ -19,11 +19,7 @@ const Profile = styled.div`
 
 const scriptBuyerStatus = `
 import FungibleToken from 0xee82856bf20e2aa6
-import NonFungibleToken from 0x01cf0e2f2f715450
-import DemoToken from 0x179b6b1cb6755e31
-import Art from 0xf3fcd2c1a78f5eee
-import Auction from 0xe03daebed8ca0615
-import Versus from 0x045a1763c93006ca
+import NonFungibleToken, DemoToken, Art, Auction, Versus from 0x01cf0e2f2f715450
 
 pub struct BuyerStatus {
 
@@ -66,9 +62,7 @@ pub fun main(address:Address) : BuyerStatus? {
 
 const setupVersusUser = `
 import FungibleToken from 0xee82856bf20e2aa6
-import DemoToken from 0x179b6b1cb6755e31
-import Art from 0xf3fcd2c1a78f5eee
-import NonFungibleToken from 0x01cf0e2f2f715450
+import NonFungibleToken, DemoToken, Art from 0x01cf0e2f2f715450
 
 transaction(tokens:UFix64) {
 
@@ -107,10 +101,9 @@ const VersusProfile = ({ user, bidTransaction }) => {
 
   useEffect(() => {
     async function fetchUserDataFromChain() {
-      const address = "0x" + user.addr;
       const response = await fcl.send([
         fcl.script(scriptBuyerStatus),
-        sdk.args([sdk.arg(address, t.Address)]),
+        sdk.args([sdk.arg(user.addr, t.Address)]),
       ]);
       setVersusProfile(await fcl.decode(response));
       setVersusProfileFetched(true);
@@ -138,9 +131,6 @@ const VersusProfile = ({ user, bidTransaction }) => {
 
   return (
     <Profile>
-      <span>
-        <b> Name</b>: {user.identity.name || "Anonymous"}
-      </span>
       <span>
         <b> Address</b>: {user.addr || ""}
       </span>

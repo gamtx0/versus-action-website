@@ -14,7 +14,7 @@ import {
 } from "../components/ArtDrop";
 
 const fetchVersusDrop = `
-import Versus from 0x045a1763c93006ca
+import Versus from 0x01cf0e2f2f715450
 
 pub fun main(address:Address) : Versus.DropStatus?{
     // get the accounts' public address objects
@@ -64,7 +64,7 @@ const Drop = ({
       handleBidTransaction(null); //we mark that the current transaction has been taken into account
     }
     if (drop == null || bidTransaction != null) {
-      console.log("FETCH DROP");
+      console.log("FETCH DROP" + marketplaceAccount);
       fetchDrop();
     }
   }, [drop, marketplaceAccount, bidTransaction]);

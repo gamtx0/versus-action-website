@@ -8,6 +8,10 @@ const bidTransaction = `
 import FungibleToken from 0xee82856bf20e2aa6
 import NonFungibleToken, Auction, Versus from 0x01cf0e2f2f715450
 
+/*
+    Transaction to make a bid in a marketplace for the given dropId and auctionId
+
+ */
 transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: UFix64) {
     // reference to the buyer's NFT collection where they
     // will store the bought NFT
@@ -21,10 +25,10 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
     prepare(account: AuthAccount) {
 
         // get the references to the buyer's Vault and NFT Collection receiver
-        self.collectionCap = account.getCapability<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection)!
-
-        self.vaultCap = account.getCapability<&{FungibleToken.Receiver}>(/public/DemoTokenReceiver)!
-                    
+        self.collectionCap = account.getCapability<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection)
+        
+        self.vaultCap = account.getCapability<&{FungibleToken.Receiver}>(/public/DemoTokenReceiver)
+                   
         let vaultRef = account.borrow<&FungibleToken.Vault>(from: /storage/DemoTokenVault)
             ?? panic("Could not borrow owner's Vault reference")
 
@@ -37,13 +41,14 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
         let seller = getAccount(marketplace)
 
         // get the reference to the seller's sale
-        let versusRef = seller.getCapability(/public/Versus)!
+        let versusRef = seller.getCapability(/public/Versus)
                          .borrow<&{Versus.PublicDrop}>()
                          ?? panic("Could not borrow seller's sale reference")
 
         versusRef.placeBid(dropId: dropId, auctionId: auctionId, bidTokens: <- self.temporaryVault, vaultCap: self.vaultCap, collectionCap: self.collectionCap)
     }
 }
+ 
 `;
 
 const Bid = ({

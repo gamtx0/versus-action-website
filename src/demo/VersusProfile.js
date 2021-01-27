@@ -34,27 +34,26 @@ pub struct BuyerStatus {
 }
 
 pub fun main(address:Address) : BuyerStatus? {
-    // get the accounts' public address objects
+    // get the accounts public address objects
     let account = getAccount(address)
     let status= BuyerStatus(address)
-    if let demoTokenCapability =account.getCapability(/public/DemoTokenBalance) {
-        if let demoTokens= demoTokenCapability.borrow<&{FungibleToken.Balance}>() {
-          status.balance=demoTokens.balance
-        }else {
-          return nil
-        }
-    } 
+    let demoTokenCapability =account.getCapability(/public/DemoTokenBalance)
+    if let demoTokens= demoTokenCapability.borrow<&{FungibleToken.Balance}>() {
+      status.balance=demoTokens.balance
+    }else {
+      return nil
+    }
+     
     
-    if let artCap = account.getCapability(/public/ArtCollection) {
-       if let art= artCap.borrow<&{NonFungibleToken.CollectionPublic}>()  {
-           for id in art.getIDs() {
-             var metadata=art.borrowNFT(id: id).metadata
-             status.art[id]=metadata
-           }
-       } else {
-         return nil
+    let artCap = account.getCapability(/public/ArtCollection) 
+    if let art= artCap.borrow<&{NonFungibleToken.CollectionPublic}>()  {
+       for id in art.getIDs() {
+         var metadata=art.borrowNFT(id: id).metadata
+         status.art[id]=metadata
        }
-    } 
+    } else {
+     return nil
+    }
 
     return status
 }
@@ -67,9 +66,11 @@ import NonFungibleToken, DemoToken, Art from 0x01cf0e2f2f715450
 transaction(tokens:UFix64) {
 
     prepare(acct: AuthAccount) {
-      let reciverRef = acct.getCapability(/public/DemoTokenReceiver)!
+
+        let reciverRef = acct.getCapability(/public/DemoTokenReceiver)
         //If we have a DemoTokenReceiver then we are already set up so just return
         if reciverRef.check<&{FungibleToken.Receiver}>() {
+            log("Account already initalized")
             return
         }
 
@@ -90,7 +91,9 @@ transaction(tokens:UFix64) {
 
         // publish a capability to the Collection in storage
         acct.link<&{NonFungibleToken.CollectionPublic}>(/public/ArtCollection, target: /storage/ArtCollection)
+      
     }
+
 }
 `;
 

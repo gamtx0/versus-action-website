@@ -47,6 +47,7 @@ function App() {
   const [bidTransaction, setBidTransaction] = useState(null);
 
   const handleDrop = (value) => {
+    console.log(value)
     setDrop(value);
   };
 

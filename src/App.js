@@ -61,6 +61,7 @@ function App() {
   );
 
   function sortEditionedAuctions(auctions) {
+    console.log(auctions)
     var entries = Object.values(auctions);
     entries.sort(function (a, b) {
       if (a.price > b.price) {
@@ -71,13 +72,13 @@ function App() {
       }
 
       if (
-        a.metadata.edition.padStart(2, 0) > b.metadata.edition.padStart(2, 0)
+        a.metadata.edition.toString().padStart(2, 0) > b.metadata.edition.toString().padStart(2, 0)
       ) {
         return 1;
       }
 
       if (
-        b.metadata.edition.padStart(2, 0) > a.metadata.edition.padStart(2, 0)
+        b.metadata.edition.toString().padStart(2, 0) > a.metadata.edition.toString().padStart(2, 0)
       ) {
         return -1;
       }

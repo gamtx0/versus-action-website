@@ -14,25 +14,32 @@ import {
 } from "../components/ArtDrop";
 
 const fetchVersusDrop = `
-import Versus from 0x01cf0e2f2f715450
+// This script checks that the accounts are set up correctly for the marketplace tutorial.
+//
 
+import Auction, Versus from 0x01cf0e2f2f715450
+
+/*
+  Script used to get the first active drop in a versus 
+ */
 pub fun main(address:Address) : Versus.DropStatus?{
     // get the accounts' public address objects
     let account = getAccount(address)
-   
-    let versusCap = account.getCapability(/public/Versus) 
-    if let versus = versusCap.borrow<&{Versus.PublicDrop}>() {
+
+    let versusCap=account.getCapability<&{Versus.PublicDrop}>(/public/Versus)
+    if let versus = versusCap.borrow() {
       let versusStatuses=versus.getAllStatuses()
       for s in versusStatuses.keys {
-        let status = versusStatuses[s]!
-         if status.uniqueStatus.active != false {
-           log(status)
-           return status
-         }
-      }
+          let status = versusStatuses[s]!
+          if status.uniqueStatus.active != false {
+            return status
+          }
+      } 
     } 
   return nil
+
 }
+
 `;
 
 const Drop = ({
@@ -59,7 +66,6 @@ const Drop = ({
         sdk.args([sdk.arg(marketplaceAccount, t.Address)]),
       ]);
       const dropResponse = await fcl.decode(response);
-      console.log(dropResponse)
       handleDrop(dropResponse);
       handleBidTransaction(null); //we mark that the current transaction has been taken into account
     }
@@ -72,7 +78,7 @@ const Drop = ({
   return (
     drop && (
       <Art>
-        <Image alt="art" src={drop.uniqueStatus.metadata.url} />
+        <Image alt="art" src={drop.uniqueStatus.art} />
         <Title>{drop.uniqueStatus.metadata.name}</Title>
         <Artist>by: {drop.uniqueStatus.metadata.artist}</Artist>
         <Description href="read">Read about the piece...</Description>

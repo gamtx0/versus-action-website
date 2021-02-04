@@ -47,7 +47,6 @@ function App() {
   const [bidTransaction, setBidTransaction] = useState(null);
 
   const handleDrop = (value) => {
-    console.log(value)
     setDrop(value);
   };
 
@@ -61,7 +60,6 @@ function App() {
   );
 
   function sortEditionedAuctions(auctions) {
-    console.log(auctions)
     var entries = Object.values(auctions);
     entries.sort(function (a, b) {
       if (a.price > b.price) {
@@ -148,7 +146,8 @@ function App() {
                 />
               )}
             </Col>
-          </Row>
+          </Row> 
+        
         </Grid>
       </ThemeProvider>
     </div>

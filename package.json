@@ -1,14 +1,14 @@
 {
-  "name": "fcl-demo",
-  "version": "0.2.0",
+  "name": "versus",
+  "version": "0.3.0",
   "dependencies": {
-    "@onflow/fcl": "^0.0.67-alpha.43",
+    "@onflow/fcl": "^0.0.67",
     "@onflow/types": "^0.0.4",
     "node-sass": "^4.14.1",
     "normalize-scss": "^7.0.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react": "^17.01.1",
+    "react-dom": "^17.01.1",
+    "react-scripts": "4.0.1",
     "react-styled-flexboxgrid": "^3.2.1",
     "styled-components": "^5.1.0"
   },

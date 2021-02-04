@@ -39,7 +39,7 @@ pub struct AddressStatus {
 /*
   This script will check an address and print out its FT, NFT and Versus resources
  */
-pub fun main(address:Address, name: String){
+pub fun main(address:Address):AddressStatus {
     // get the accounts' public address objects
     let account = getAccount(address)
     let status= AddressStatus(address)
@@ -82,7 +82,6 @@ transaction() {
 const VersusProfile = ({ user, bidTransaction }) => {
   const [versusProfileFetched, setVersusProfileFetched] = useState(false);
   const [versusProfile, setVersusProfile] = useState(false);
-  const [transaction, setTransaction] = useState(null);
 
   useEffect(() => {
     async function fetchUserDataFromChain() {
@@ -94,25 +93,7 @@ const VersusProfile = ({ user, bidTransaction }) => {
       setVersusProfileFetched(true);
     }
     fetchUserDataFromChain();
-  }, [user, transaction, bidTransaction]);
-
-  //TODO: this is not needed anymore really
-  useEffect(() => {
-    async function setupUser() {
-      const response = await fcl.send([
-        fcl.transaction(setupVersusUser),
-        fcl.proposer(fcl.currentUser().authorization),
-        fcl.payer(fcl.currentUser().authorization),
-        fcl.authorizations([fcl.currentUser().authorization]),
-        fcl.limit(1000),
-      ]);
-      setTransaction(await fcl.tx(response).onceSealed());
-    }
-
-    if (versusProfileFetched && versusProfile == null && user.addr) {
-      setupUser();
-    }
-  }, [user, versusProfileFetched, versusProfile]);
+  }, [user, bidTransaction]);
 
   return (
     <Profile>

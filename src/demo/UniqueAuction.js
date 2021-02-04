@@ -46,19 +46,22 @@ const UniqueAuction = ({
         handleBidTransaction={handleBidTransaction}
         className="margin-top-170"
       />
+
+      { drop.firstBidBlock &&
       <History>
         <Pretext>
           bid history: <span>{drop.uniqueStatus.bids}</span>
         </Pretext>
         {
           <Events
-            startBlock={drop.uniqueStatus.startBlock}
+            startBlock={drop.firstBidBlock}
             dropId={drop.dropId}
             auctionId={drop.uniqueStatus.id}
             bidTranscation={bidTranscation}
           />
         }
-      </History>
+      </History> 
+      }
     </UniqueAuctionBox>
   );
 };

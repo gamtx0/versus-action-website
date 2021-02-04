@@ -10,13 +10,17 @@ const GetEvents = ({ startBlock, dropId, auctionId, bidTransaction }) => {
 
   useEffect(() => {
     async function fetchEvent() {
+      if(!startBlock) {
+        return
+      }
       const url = await fcl.config().get("accessNode.api");
       const response = await sdk.send(
         await sdk.build([sdk.getEvents(eventType, startBlock, null)]),
         { node: url }
       );
-
       const decodedResponse = await sdk.decodeResponse(response);
+      console.log(dropId, auctionId)
+      console.log(decodedResponse)
       const filtered = decodedResponse
         .filter(
           (result) =>

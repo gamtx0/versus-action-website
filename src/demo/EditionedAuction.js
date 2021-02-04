@@ -95,19 +95,21 @@ const EditionedAuction = ({
           handleBidTransaction={handleBidTransaction}
         />
       </BidFieldset>
-      <History>
+      
+      { drop.firstBidBlock && <History>
         <Pretext>
           bid history: <span>{activeAuction.bids}</span>
         </Pretext>
         {
           <Events
-            startBlock={drop.uniqueStatus.startBlock}
+            startBlock={drop.firstBidBlock}
             dropId={drop.dropId}
             auctionId={auctionId}
             bidTransaction={bidTransaction}
           />
         }
       </History>
+      }
     </EditionedAuctionBox>
   );
 };

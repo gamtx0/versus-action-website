@@ -49,16 +49,6 @@ const Drop = ({
   bidTransaction,
   handleBidTransaction,
 }) => {
-  /*
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleBidTransaction("refresh")
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-  */
-
-  //This is rerun alot, why is that?
   useEffect(() => {
     async function fetchDrop() {
       const response = await fcl.send([
@@ -66,6 +56,7 @@ const Drop = ({
         sdk.args([sdk.arg(marketplaceAccount, t.Address)]),
       ]);
       const dropResponse = await fcl.decode(response);
+      console.log(dropResponse)
       handleDrop(dropResponse);
       handleBidTransaction(null); //we mark that the current transaction has been taken into account
     }

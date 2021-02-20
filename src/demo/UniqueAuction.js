@@ -47,7 +47,15 @@ const UniqueAuction = ({
         className="margin-top-170"
       />
 
-      { drop.firstBidBlock &&
+     
+    </UniqueAuctionBox>
+  );
+};
+
+export default UniqueAuction;
+
+/*
+ { drop.firstBidBlock &&
       <History>
         <Pretext>
           bid history: <span>{drop.uniqueStatus.bids}</span>
@@ -62,8 +70,5 @@ const UniqueAuction = ({
         }
       </History> 
       }
-    </UniqueAuctionBox>
-  );
-};
-
-export default UniqueAuction;
+      */
+     

@@ -39,7 +39,7 @@ export const Image = styled.img`
   margin: auto;
 `;
 
-const marketplaceAccount = "0x179b6b1cb6755e31";
+const marketplaceAccount = "0x8027e3565a8941d1"
 
 function App() {
   const [user, setUser] = useState({});

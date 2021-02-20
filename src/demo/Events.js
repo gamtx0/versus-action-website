@@ -19,8 +19,6 @@ const GetEvents = ({ startBlock, dropId, auctionId, bidTransaction }) => {
         { node: url }
       );
       const decodedResponse = await sdk.decodeResponse(response);
-      console.log(dropId, auctionId)
-      console.log(decodedResponse)
       const filtered = decodedResponse
         .filter(
           (result) =>

@@ -48,7 +48,7 @@ pub fun main(address:Address):AddressStatus {
        status.balance=vault.balance
     }
 
-    if let art= account.getCapability(/public/ArtCollection).borrow<&{Art.CollectionPublic}>()  {
+    if let art= account.getCapability(Art.CollectionPublicPath).borrow<&{Art.CollectionPublic}>()  {
        
         for id in art.getIDs() {
           var art=art.borrowArt(id: id) 

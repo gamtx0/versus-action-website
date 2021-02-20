@@ -94,9 +94,9 @@ function App() {
     return entries;
   }
   return (
-    <div class="content-wrapper">
+    <div className="content-wrapper">
       <ThemeProvider theme={theme}>
-        <Grid fluid="true">
+        <Grid fluid>
           <Row center="xs">
             <Col xs={4} className="flex justify-content-end align-items-center">
               <Authenticate user={user} />

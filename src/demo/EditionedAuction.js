@@ -33,7 +33,7 @@ const EditionedAuction = ({
     return (
       <div className="max-width-211">
         <SelectFieldWrapper>
-          <label for="editions" className="text-label">
+          <label htmlFor="editions" className="text-label">
             Select the edition # to bid on
           </label>
           <Select

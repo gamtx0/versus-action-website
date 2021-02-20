@@ -4,10 +4,9 @@ import * as t from "@onflow/types";
 
 import { BidFieldset, BidButton, PriceFieldWrapper } from "../components/Form";
 
-const bidTransaction = `
-import FungibleToken from 0x9a0766d93b6608b7
+const bidTransaction = `import FungibleToken from 0x9a0766d93b6608b7
 import NonFungibleToken from 0x631e88ae7f1d7c20
-import from Art, Auction, Versus from 0x1ff7e32d71183db0
+import Art, Auction, Versus from 0x1ff7e32d71183db0
 
 /*
     Transaction to make a bid in a marketplace for the given dropId and auctionId
@@ -26,15 +25,15 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
     prepare(account: AuthAccount) {
 
         // get the references to the buyer's Vault and NFT Collection receiver
-        var collectionCap = account.getCapability<&{Art.CollectionPublic}>(/public/ArtCollection)
+        var collectionCap = account.getCapability<&{Art.CollectionPublic}>(Art.CollectionPublicPath)
 
         // if collection is not created yet we make it.
         if !collectionCap.check() {
             // store an empty NFT Collection in account storage
-            account.save<@NonFungibleToken.Collection>(<- Art.createEmptyCollection(), to: /storage/ArtCollection)
+            account.save<@NonFungibleToken.Collection>(<- Art.createEmptyCollection(), to: Art.CollectionStoragePath)
 
             // publish a capability to the Collection in storage
-            account.link<&{Art.CollectionPublic}>(/public/ArtCollection, target: /storage/ArtCollection)
+            account.link<&{Art.CollectionPublic}>(Art.CollectionPublicPath, target: Art.CollectionStoragePath)
         }
 
         self.collectionCap=collectionCap
@@ -53,7 +52,7 @@ transaction(marketplace: Address, dropId: UInt64, auctionId: UInt64, bidAmount: 
         let seller = getAccount(marketplace)
 
         // get the reference to the seller's sale
-        let versusRef = seller.getCapability(/public/Versus)
+        let versusRef = seller.getCapability(Versus.CollectionPublicPath)
                          .borrow<&{Versus.PublicDrop}>()
                          ?? panic("Could not borrow seller's sale reference")
 
@@ -73,7 +72,7 @@ const Bid = ({
 }) => {
   const [price, setPrice] = useState(minNextBid);
 
-  useEffect(() => setPrice(parseFloat(minNextBid)), [minNextBid, auctionId]);
+  useEffect(() => setPrice(minNextBid), [minNextBid, auctionId]);
 
   const BidOnAuction = async () => {
     const response = await fcl.send([
@@ -82,7 +81,7 @@ const Bid = ({
         fcl.arg(marketplaceAccount, t.Address),
         fcl.arg(dropId, t.UInt64),
         fcl.arg(auctionId, t.UInt64),
-        fcl.arg(parseFloat(price), t.UFix64),
+        fcl.arg(price, t.UFix64),
       ]),
       fcl.proposer(fcl.currentUser().authorization),
       fcl.payer(fcl.currentUser().authorization),
@@ -106,14 +105,14 @@ const Bid = ({
     >
       <BidFieldset>
         <PriceFieldWrapper>
-          <label for="price">&#120125;</label>
+          <label htmlFor="price">&#120125;</label>
           <input
             name="price"
             type="number"
             min={minNextBid}
             step="0.01"
             value={price}
-            onChange={(e) => setPrice(parseFloat(e.target.value))}
+            onChange={(e) => setPrice(e.target.value)}
           />
         </PriceFieldWrapper>
         <BidButton type="submit" value="Place Bid" />

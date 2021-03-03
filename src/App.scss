@@ -1,0 +1,124 @@
+@import "../node_modules/normalize-scss/sass/normalize/import-now";
+
+* {
+  box-sizing: border-box;
+}
+
+iframe {
+  z-index: 5;
+}
+
+.bg-columns,
+.bg-triangle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.bg-columns {
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 50%;
+  }
+
+  &:before {
+    background-color: rgba(0, 0, 0, 0.8);
+    left: 0;
+  }
+
+  &:after {
+    background-color: rgba(255, 255, 255, 1);
+    right: 0;
+  }
+}
+
+.bg-triangle {
+  width: 0px;
+  height: 0px;
+  border-left: 430px solid transparent;
+  border-right: 430px solid transparent;
+  border-top: 100vh solid #000;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.logo {
+  max-width: 55px;
+}
+
+.content-wrapper {
+  margin: 30px auto;
+  max-width: 1260px;
+  position: relative;
+  z-index: 3;
+  color: white;
+  font-family: "Roboto", "Lucida Grande", Tahoma, Sans-Serif;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.justify-content-start {
+  justify-content: flex-start;
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.pad-top-30 {
+  padding-top: 30px;
+}
+
+.margin-bottom-110 {
+  margin-bottom: 90px;
+}
+
+.margin-bottom-277 {
+  margin-bottom: 277px;
+}
+
+.margin-top-170 {
+  margin-top: 170px;
+}
+
+.max-width-211 {
+  max-width: 211px;
+  width: 100%;
+}
+
+// Hack the nested FieldSet margin
+div {
+  &.align-right {
+    @extend .flex;
+    @extend .flex-column;
+    @extend .align-items-end;
+
+    form {
+      max-width: 211px;
+      width: 100%;
+    }
+
+    > div {
+      margin-top: 20px !important;
+    }
+  }
+}

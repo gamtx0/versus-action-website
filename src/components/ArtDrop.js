@@ -1,33 +1,47 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 export const Art = styled.div`
-    margin-top: 50px;
-    color: white;
-    text-align: center;
-`
+  margin-top: 50px;
+  color: white;
+  text-align: center;
+`;
 
 export const Image = styled.img`
-    width: 400px;
-    border: 1px solid white;
-    display: block;
-    margin: auto;
-`
+  width: 310px;
+  border: 1px solid white;
+  display: block;
+  margin: auto;
+`;
 
 export const Title = styled.h1`
-   font-size: 3em;
-`
+  font-size: 28px;
+  line-height: 32px;
+  margin-top: 26px;
+  margin-bottom: 10px;
+`;
+
+export const Artist = styled.span`
+  display: block;
+  font-size: 12px;
+  line-height: 14px;
+  margin-bottom: 16px;
+`;
 
 export const Description = styled.a`
-    color: grey;
-    text-decoration: none;
-`
+  color: #757575;
+  font-size: 12px;
+  text-decoration: none;
+`;
 
 export const Remaining = styled.div`
-    margin-top: 100px;
-    color: red;
-`
+  color: #fa2061;
+  font-size: 17px;
+  line-height: 20px;
+  margin-top: 40px;
+`;
 
 export const Time = styled.div`
-    color: red;
-    font-size:2em;
-`
+  color: #fa2061;
+  font-size: 18px;
+  line-height: 21px;
+`;

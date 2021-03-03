@@ -1,71 +1,135 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
-export const BidButton= styled.input`
-background-color: #FA2061;
-mix-blend-mode: normal;
-opacity: 0.9;
-border-radius: 8px;
-text-align: center;
-font-size: 14px;
-color: white;
-font-size: inherit;
-padding: 0.5em;    
-margin-left: 5px;
--moz-box-sizing: content-box;
-cursor:pointer;
--webkit-box-sizing: content-box;
-box-sizing: content-box;
-width: 200px;
+export const BidButton = styled.input`
+  background-color: #fa2061;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  display: block;
+  font-size: 14px;
+  line-height: 19px;
+  margin-top: 21px;
+  max-width: 211px;
+  padding: 12px 0;
+  text-align: center;
+  transition: background-color 0.5s;
+  width: 100%;
 
- &:hover {
-     opacity: 0.7;
- }
-`
+  &:hover {
+    background-color: darken(#fa2061, 15%);
+    cursor: pointer;
+    transition: background-color 0.5s;
+  }
+`;
 
-export const BidFieldset=styled.fieldset`
-border: 0;
-font-size: 1em;
-padding: 0px;
+export const BidFieldset = styled.div`
+  border: 0;
+  padding: 0px;
 
-`
-export const Label=styled.label`
-font-size: inherit;
--moz-box-sizing: content-box;
--webkit-box-sizing: content-box;
-box-sizing: content-box;
-background: black;
-color: white;
-border: 1px solid black;
-padding: 0.5em;
-border-radius: 8px 0px 0px 8px;
-`
+  .text-label {
+    align-self: flex-end;
+    display: flex;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1%;
+  }
+`;
 
-export const Select=styled.select`
-background: transparent;
-text-align: right;
-border: 1px solid black;
-width: 275px;
-padding: 0.4em;
-height: 22px;
-font-size: inherit;
--moz-box-sizing: content-box;
--webkit-box-sizing: content-box;
-box-sizing: content-box;
-border-radius: 0px 8px 8px 0px;
-cursor:pointer;
-margin-bottom:2px;
-`
+export const PriceFieldWrapper = styled.div`
+  position: relative;
+  max-width: 211px;
+  min-height: 43px;
+  width: 100%;
 
-export const PriceInput=styled.input`
-background: transparent;
-text-align: right;
-border: 1px solid black;
-width: 70px;
-cursor: input;
-padding: 0.5em;
-font-size: inherit;
--moz-box-sizing: content-box;
--webkit-box-sizing: content-box;
-box-sizing: content-box;
-border-radius: 0px 8px 8px 0px;
-`
+  label,
+  input {
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 0.5em;
+  }
+
+  label {
+    background: black;
+    color: white;
+    line-height: 25px;
+    z-index: 2;
+  }
+
+  input {
+    color: inherit;
+    background: transparent;
+    border: none; // reset user agent styles
+    border-bottom: 1px solid #d3d8dd;
+    cursor: input;
+    padding-left: 60px;
+    padding-right: 0;
+    text-align: right;
+    width: 100%;
+    z-index: 1;
+  }
+`;
+
+export const SelectFieldWrapper = styled.div`
+  border-bottom: 1px solid #d3d8dd;
+  margin-bottom: 21px;
+  max-width: 211px;
+  width: 100%;
+`;
+
+export const Select = styled.select`
+  background: transparent;
+  text-align: right;
+  border: none;
+  border-bottom: 2px solid #d3d8dd
+  max-width: 198px;
+  width: 100%;
+  padding: 0.4em;
+  height: 22px;
+  font-size: inherit;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  border-radius: 0px 8px 8px 0px;
+  cursor: pointer;
+  margin-bottom: 2px;
+`;
+
+export const EditionInfo = styled.div`
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+
+  margin-bottom: 27px;
+  max-width: 211px;
+  padding-top: 21px;
+
+  font-size: 13px;
+  width: 100%;
+
+  .label {
+    text-align: left;
+  }
+
+  .data {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+
+    &__price-wrap {
+      &__currency-label {
+        padding-right: 2px;
+      }
+      &__price {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 12.89px;
+      }
+    }
+  }
+`;

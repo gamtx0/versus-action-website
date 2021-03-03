@@ -56,7 +56,7 @@ export const PriceFieldWrapper = styled.div`
 
   label {
     background: black;
-    color: white;
+    color: black;
     line-height: 25px;
     z-index: 2;
   }

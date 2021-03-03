@@ -95,16 +95,7 @@ const EditionedAuction = ({
           handleBidTransaction={handleBidTransaction}
         />
       </BidFieldset>
-      
-  
-    </EditionedAuctionBox>
-  );
-};
-
-export default EditionedAuction;
-
-/*
-    { drop.firstBidBlock && <History>
+      { drop.firstBidBlock && <History>
         <Pretext>
           bid history: <span>{activeAuction.bids}</span>
         </Pretext>
@@ -117,4 +108,11 @@ export default EditionedAuction;
           />
         }
       </History>
-      }*/
+      } 
+  
+    </EditionedAuctionBox>
+  );
+};
+
+export default EditionedAuction;
+

@@ -71,11 +71,12 @@ const Bid = ({
   handleBidTransaction,
 }) => {
   const [price, setPrice] = useState(minNextBid);
+  const[status,setStatus] = useState("")
 
   useEffect(() => setPrice(minNextBid), [minNextBid, auctionId]);
 
   const BidOnAuction = async () => {
-    const response = await fcl.send([
+    const response = await tx([
       fcl.transaction(bidTransaction),
       fcl.args([
         fcl.arg(marketplaceAccount, t.Address),
@@ -87,8 +88,25 @@ const Bid = ({
       fcl.payer(fcl.currentUser().authorization),
       fcl.authorizations([fcl.currentUser().authorization]),
       fcl.limit(1000),
-    ]);
-    handleBidTransaction(await fcl.tx(response).onceSealed());
+    ], {
+      onStart() {
+        setStatus("Transaction received")
+      },
+      async onSuccess(foo) {
+        setStatus("Transaction success")
+        handleBidTransaction(foo)
+      },
+      onSubmission() {
+        setStatus("Transaction submitted")
+      },
+      async onComplete() {
+        setStatus("")
+      },
+      async onError(error) {
+        setStatus("Transaction Error")
+      }
+
+    });
   };
 
   function handleSubmit(event) {
@@ -96,6 +114,13 @@ const Bid = ({
     BidOnAuction();
   }
 
+
+  let button
+  if(status === "") {
+      button=<BidButton type="submit" value="Place Bid" />
+  } else {
+      button=<div>{status}</div>
+  }
   return (
     <form
       onSubmit={(e) => {
@@ -115,10 +140,52 @@ const Bid = ({
             onChange={(e) => setPrice(e.target.value)}
           />
         </PriceFieldWrapper>
-        <BidButton type="submit" value="Place Bid" />
+        {button}
       </BidFieldset>
-    </form>
+    </form> 
+    
   );
 };
 
+const noop = async () => {}
+
+async function tx(mods = [], opts = {}) {
+  const onStart = opts.onStart || noop
+  const onSubmission = opts.onSubmission || noop
+  const onUpdate = opts.onUpdate || noop
+  const onSuccess = opts.onSuccess || noop
+  const onError = opts.onError || noop
+  const onComplete = opts.onComplete || noop
+
+  try {
+    onStart()
+    var txId = await fcl.send(mods).then(fcl.decode)
+    console.info(
+      `%cTX[${txId}]: ${fvsTx(await fcl.config().get("env"), txId)}`,
+      "color:purple;font-weight:bold;font-family:monospace;"
+    )
+    onSubmission(txId)
+    var unsub = await fcl.tx(txId).subscribe(onUpdate)
+    var txStatus = await fcl.tx(txId).onceSealed()
+    unsub()
+    console.info(
+      `%cTX[${txId}]: ${fvsTx(await fcl.config().get("env"), txId)}`,
+      "color:green;font-weight:bold;font-family:monospace;"
+    )
+    await onSuccess(txStatus)
+    return txStatus
+  } catch (error) {
+    console.error(
+      `TX[${txId}]: ${fvsTx(await fcl.config().get("env"), txId)}`,
+      error
+    )
+    onError(error)
+  } finally {
+    await onComplete()
+  }
+}
+
+function fvsTx(env, txId) {
+  return `https://flow-view-source.com/${env}/tx/${txId}`
+}
 export default Bid;

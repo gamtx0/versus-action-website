@@ -2,23 +2,42 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as sdk from "@onflow/sdk";
 import * as fcl from "@onflow/fcl";
+import { getEvents } from "@onflow/sdk-build-get-events";
+import { getLatestBlock } from "@onflow/sdk-build-get-latest-block";
+import { send } from "@onflow/sdk-send";
+
+
 
 const GetEvents = ({ startBlock, dropId, auctionId, bidTransaction }) => {
   const [result, setResult] = useState(null);
 
+  //TODO: change to TBid
   const eventType = "A.1ff7e32d71183db0.Versus.Bid";
 
   useEffect(() => {
     async function fetchEvent() {
-      if(!startBlock) {
+
+      const latestBlock= await(send([
+          getLatestBlock(true)
+      ]))
+      if(!startBlock || !latestBlock) {
         return
       }
-      const url = await fcl.config().get("accessNode.api");
-      const response = await sdk.send(
-        await sdk.build([sdk.getEvents(eventType, startBlock, null)]),
-        { node: url }
-      );
-      const decodedResponse = await sdk.decodeResponse(response);
+
+
+      const blockHeight =latestBlock.block.height
+
+
+      let decodedResponse
+      try {
+        const getEventsResult = await send([
+          getEvents(eventType, startBlock, blockHeight),
+        ]);
+        decodedResponse = await fcl.decode(getEventsResult);
+      }catch(e) {
+        console.error("cannot get events", e)
+      }
+
       const filtered = decodedResponse
         .filter(
           (result) =>
@@ -33,6 +52,7 @@ const GetEvents = ({ startBlock, dropId, auctionId, bidTransaction }) => {
         }))
         .reverse();
 
+        console.log(filtered)
       setResult(filtered);
     }
     fetchEvent();

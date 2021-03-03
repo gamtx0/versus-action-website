@@ -1,7 +1,7 @@
 {
   "name": "versus",
   "version": "0.4.0",
-	"homepage" : "http://versus-flow.github.io/versus-action-website",
+	"homepage" : "http://versus-flow.github.io/versus-auction-website",
   "dependencies": {
     "@onflow/fcl": "^0.0.67",
     "@onflow/types": "^0.0.4",

@@ -1,6 +1,7 @@
 {
   "name": "versus",
-  "version": "0.3.0",
+  "version": "0.4.0",
+	"homepage" : "http://versus-flow.github.io/versus-action-website",
   "dependencies": {
     "@onflow/fcl": "^0.0.67",
     "@onflow/types": "^0.0.4",
@@ -15,6 +16,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+		"deploy" : "gh-pages -d build",
+		"predeploy" : "yarn run build",
     "eject": "react-scripts eject",
     "dev-wallet": "PK=bf9db4706c2fdb9011ee7e170ccac492f05427b96ab41d8bf2d8c58443704b76 fcl-wallet"
   },

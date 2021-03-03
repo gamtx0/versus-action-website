@@ -46,15 +46,6 @@ const UniqueAuction = ({
         handleBidTransaction={handleBidTransaction}
         className="margin-top-170"
       />
-
-     
-    </UniqueAuctionBox>
-  );
-};
-
-export default UniqueAuction;
-
-/*
  { drop.firstBidBlock &&
       <History>
         <Pretext>
@@ -70,5 +61,10 @@ export default UniqueAuction;
         }
       </History> 
       }
-      */
+
      
+    </UniqueAuctionBox>
+  );
+};
+
+export default UniqueAuction;

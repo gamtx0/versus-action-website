@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/versus-action-website/static/css/main.8810f964.chunk.css",
-    "main.js": "/versus-action-website/static/js/main.f385f0f3.chunk.js",
-    "main.js.map": "/versus-action-website/static/js/main.f385f0f3.chunk.js.map",
+    "main.js": "/versus-action-website/static/js/main.c4fc85f5.chunk.js",
+    "main.js.map": "/versus-action-website/static/js/main.c4fc85f5.chunk.js.map",
     "runtime-main.js": "/versus-action-website/static/js/runtime-main.a3ef1973.js",
     "runtime-main.js.map": "/versus-action-website/static/js/runtime-main.a3ef1973.js.map",
     "static/js/2.00c15a83.chunk.js": "/versus-action-website/static/js/2.00c15a83.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.a3ef1973.js",
     "static/js/2.00c15a83.chunk.js",
     "static/css/main.8810f964.chunk.css",
-    "static/js/main.f385f0f3.chunk.js"
+    "static/js/main.c4fc85f5.chunk.js"
   ]
 }
